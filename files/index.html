@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="ECOPASO - Baldosa Ecológica Piezoeléctrica. Convierte pisadas en energía eléctrica. UFPS 2026.">
+<title>ECOPASO | Baldosa Ecológica Piezoeléctrica</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:rgb(8,10,20);
+  --bg2:rgb(12,16,30);
+  --bg3:rgb(16,22,42);
+  --bg4:rgb(20,28,52);
+  --blue:rgb(37,99,235);
+  --blue2:rgb(59,130,246);
+  --blue3:rgb(147,197,253);
+  --accent:rgb(6,182,212);
+  --accent2:rgb(34,211,238);
+  --green:rgb(16,185,129);
+  --text:rgb(226,232,240);
+  --muted:rgb(100,116,139);
+  --border:rgba(37,99,235,0.18);
+  --card:rgb(14,20,38);
+}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;line-height:1.6}
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--blue);border-radius:3px}
+
+/* PROGRESS */
+#prog{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--blue),var(--accent));z-index:9999;width:0;transition:width .1s}
+
+/* BACK TOP */
+#btt{position:fixed;bottom:1.5rem;right:1.5rem;width:42px;height:42px;background:var(--blue);border:none;border-radius:50%;color:#fff;font-size:1rem;cursor:pointer;z-index:500;opacity:0;transform:translateY(16px);transition:all .3s;display:flex;align-items:center;justify-content:center}
+#btt.show{opacity:1;transform:translateY(0)}
+#btt:hover{background:var(--blue2);transform:translateY(-3px)}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;justify-content:space-between;align-items:center;padding:.9rem 3rem;background:rgba(8,10,20,.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.nav-brand{display:flex;align-items:center;gap:.8rem}
+.nav-brand img{height:34px;object-fit:contain}
+.nav-brand span{font-family:'Syne',sans-serif;font-weight:700;font-size:1.1rem;color:#fff}
+.nav-links{display:flex;gap:1.8rem;list-style:none}
+.nav-links a{font-size:.72rem;font-weight:500;color:var(--muted);text-decoration:none;letter-spacing:.08em;text-transform:uppercase;transition:color .2s;white-space:nowrap}
+.nav-links a:hover{color:var(--accent)}
+.ham{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:.3rem}
+.ham span{width:22px;height:2px;background:var(--text);border-radius:2px;transition:all .3s;display:block}
+.mob{display:none;position:fixed;top:58px;left:0;right:0;background:rgba(8,10,20,.98);border-bottom:1px solid var(--border);z-index:199;padding:1.2rem 2rem;flex-direction:column;gap:.9rem}
+.mob.open{display:flex}
+.mob a{font-size:.82rem;color:var(--text);text-decoration:none;letter-spacing:.05em;text-transform:uppercase;padding:.5rem 0;border-bottom:1px solid var(--border)}
+.mob a:last-child{border:none}
+
+/* HERO */
+#inicio{min-height:100vh;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;padding:8rem 2rem 4rem;text-align:center}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 50% 40%,rgba(37,99,235,.12) 0%,transparent 70%),radial-gradient(ellipse 40% 35% at 20% 70%,rgba(6,182,212,.07) 0%,transparent 60%),var(--bg)}
+.hero-grid-bg{position:absolute;inset:0;background-image:linear-gradient(rgba(37,99,235,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(37,99,235,.04) 1px,transparent 1px);background-size:50px 50px;mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 20%,transparent 100%)}
+.hero-inner{position:relative;max-width:860px}
+.badge{display:inline-flex;align-items:center;gap:.5rem;background:rgba(37,99,235,.1);border:1px solid rgba(37,99,235,.25);color:var(--blue3);font-size:.7rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;padding:.35rem 1rem;border-radius:100px;margin-bottom:1.8rem}
+.badge-dot{width:6px;height:6px;background:var(--accent);border-radius:50%;animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+.hero-logo{width:180px;margin:0 auto 1.5rem}
+.hero-logo img{width:100%;object-fit:contain}
+.hero-h1{font-family:'Syne',sans-serif;font-size:clamp(3.5rem,9vw,7rem);font-weight:800;line-height:.9;letter-spacing:-.04em;color:#fff}
+.hero-h1 .b{color:var(--blue2)}
+.hero-h1 .a{color:var(--accent)}
+.hero-sub{font-family:'Syne',sans-serif;font-size:clamp(1rem,2.5vw,1.4rem);font-weight:500;color:rgba(226,232,240,.5);margin-top:.6rem;letter-spacing:-.01em}
+.hero-tag{font-size:.82rem;font-style:italic;color:rgba(6,182,212,.7);margin-top:.8rem}
+.hero-p{margin-top:1.4rem;font-size:.98rem;color:rgba(226,232,240,.65);max-width:580px;margin-inline:auto;line-height:1.75}
+.cta{margin-top:2.5rem;display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+.btn-main{background:var(--blue);color:#fff;padding:.8rem 1.8rem;border-radius:6px;text-decoration:none;font-weight:500;font-size:.88rem;transition:all .25s;display:inline-flex;align-items:center;gap:.4rem;border:none;cursor:pointer}
+.btn-main:hover{background:var(--blue2);transform:translateY(-2px);box-shadow:0 8px 28px rgba(37,99,235,.3)}
+.btn-out{border:1px solid rgba(226,232,240,.15);color:var(--text);padding:.8rem 1.8rem;border-radius:6px;text-decoration:none;font-weight:400;font-size:.88rem;transition:all .25s}
+.btn-out:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-2px)}
+.stats{margin-top:3.5rem;display:flex;border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.stat{flex:1;padding:1.3rem .8rem;border-right:1px solid var(--border);text-align:center}
+.stat:last-child{border-right:none}
+.stat-n{font-family:'Syne',sans-serif;font-size:1.7rem;font-weight:800;color:#fff;line-height:1}
+.stat-n em{color:var(--accent);font-style:normal}
+.stat-l{font-size:.65rem;color:var(--muted);margin-top:.25rem;letter-spacing:.06em;text-transform:uppercase}
+
+/* FADE IN */
+.fi{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease}
+.fi.in{opacity:1;transform:none}
+
+/* SECTION */
+.sec{padding:5.5rem 2rem;max-width:1200px;margin-inline:auto}
+.sfull{padding:5.5rem 0}
+.sfull .inn{max-width:1200px;margin-inline:auto;padding:0 2rem}
+.stag{font-size:.68rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:.6rem;display:flex;align-items:center;gap:.5rem}
+.stag::before{content:'';width:18px;height:1px;background:var(--accent)}
+h2{font-family:'Syne',sans-serif;font-size:clamp(1.8rem,3.5vw,2.6rem);font-weight:700;color:#fff;line-height:1.1;letter-spacing:-.02em;margin-bottom:.8rem}
+h3{font-family:'Syne',sans-serif;font-size:1.05rem;font-weight:600;color:#fff;margin-bottom:.5rem}
+p{color:rgba(226,232,240,.68);line-height:1.8;margin-bottom:.9rem}
+p:last-child{margin-bottom:0}
+
+/* CARDS */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:2.5rem;margin-top:2.5rem}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;margin-top:2.5rem}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-top:2.5rem}
+.card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.6rem;transition:all .3s}
+.card:hover{border-color:rgba(37,99,235,.4);transform:translateY(-4px);box-shadow:0 12px 32px rgba(0,0,0,.4)}
+.card-icon{font-size:1.8rem;margin-bottom:.9rem}
+.data-n{font-family:'Syne',sans-serif;font-size:2.1rem;font-weight:800;color:var(--accent);line-height:1}
+.data-d{font-size:.8rem;color:var(--muted);margin-top:.4rem;line-height:1.5}
+.data-s{font-size:.68rem;color:rgba(100,116,139,.55);margin-top:.6rem;font-style:italic}
+
+/* OBJECTIVES */
+.obj-main{background:var(--bg3);border:1px solid rgba(6,182,212,.2);border-radius:10px;padding:1.8rem;border-left:3px solid var(--accent)}
+.obj-label{font-size:.68rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:.7rem}
+.obj-list{list-style:none;margin-top:.5rem}
+.obj-list li{display:flex;align-items:flex-start;gap:.7rem;padding:.65rem 0;border-bottom:1px solid var(--border);font-size:.88rem;color:rgba(226,232,240,.75)}
+.obj-list li:last-child{border:none}
+.obj-list li::before{content:'›';color:var(--blue2);font-weight:700;flex-shrink:0;font-size:1.1rem;line-height:1.4}
+
+/* STEPS */
+.steps{margin-top:2.5rem;position:relative}
+.steps::before{content:'';position:absolute;left:21px;top:8px;bottom:0;width:1px;background:linear-gradient(to bottom,var(--blue),transparent)}
+.step{display:flex;gap:1.8rem;padding-bottom:2.2rem;position:relative}
+.snum{width:44px;height:44px;border-radius:50%;background:var(--bg3);border:2px solid var(--blue);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:700;font-size:.78rem;color:var(--blue2);flex-shrink:0;z-index:1;transition:all .3s}
+.step:hover .snum{background:var(--blue);color:#fff}
+.scont{padding-top:.4rem}
+.scont .t{font-family:'Syne',sans-serif;font-weight:600;font-size:.95rem;color:#fff;margin-bottom:.3rem}
+.scont .d{font-size:.86rem;color:var(--muted);line-height:1.65}
+
+/* TABLE */
+.ttable{width:100%;border-collapse:collapse;margin-top:2rem;font-size:.85rem}
+.ttable th{text-align:left;padding:.75rem 1rem;background:var(--bg3);color:var(--accent);font-weight:600;font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;border-bottom:1px solid var(--border)}
+.ttable td{padding:.7rem 1rem;border-bottom:1px solid var(--border);color:rgba(226,232,240,.72);vertical-align:top}
+.ttable tr:last-child td{border:none}
+.ttable tr:hover td{background:rgba(37,99,235,.04)}
+.hl{color:#fff;font-weight:500}
+
+/* RESULTS */
+.res-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.8rem;transition:all .3s}
+.res-card:hover{border-color:rgba(6,182,212,.3);transform:translateY(-4px)}
+.res-n{font-family:'Syne',sans-serif;font-size:2.8rem;font-weight:800;color:rgba(6,182,212,.1);line-height:1;margin-bottom:.7rem}
+.res-t{font-size:.9rem;line-height:1.7;color:rgba(226,232,240,.75)}
+
+/* VIDEO */
+.vid-wrap{margin-top:2.5rem;border-radius:12px;overflow:hidden;border:1px solid var(--border);background:var(--card)}
+.vid-wrap video{width:100%;display:block;max-height:500px;object-fit:contain;background:#000}
+.vid-cap{padding:1rem 1.4rem;font-size:.82rem;color:var(--muted)}
+.vid-cap strong{color:var(--text)}
+
+/* GALLERY */
+.gal-tabs{display:flex;gap:.4rem;margin-bottom:1.8rem;flex-wrap:wrap}
+.gtab{background:none;border:1px solid var(--border);color:var(--muted);padding:.35rem .9rem;border-radius:100px;font-size:.74rem;cursor:pointer;transition:all .2s;font-family:'Inter',sans-serif}
+.gtab:hover,.gtab.on{background:var(--blue);color:#fff;border-color:var(--blue)}
+.gal-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem}
+.gal-item{border-radius:10px;overflow:hidden;background:var(--card);border:1px solid var(--border);cursor:pointer;transition:all .3s}
+.gal-item:hover{border-color:var(--blue2);transform:translateY(-4px);box-shadow:0 12px 30px rgba(0,0,0,.5)}
+.gal-item img{width:100%;height:210px;object-fit:cover;display:block;transition:transform .35s}
+.gal-item:hover img{transform:scale(1.04)}
+.gal-info{padding:.9rem 1rem}
+.gal-t{font-family:'Syne',sans-serif;font-weight:600;font-size:.86rem;color:#fff}
+.gal-d{font-size:.75rem;color:var(--muted);margin-top:.25rem;line-height:1.5}
+.gal-badge{display:inline-block;font-size:.62rem;letter-spacing:.07em;text-transform:uppercase;background:rgba(37,99,235,.1);color:var(--blue3);border:1px solid rgba(37,99,235,.2);padding:.15rem .55rem;border-radius:100px;margin-top:.45rem}
+
+/* LIGHTBOX */
+.lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.94);z-index:9000;align-items:center;justify-content:center;padding:2rem}
+.lb.open{display:flex}
+.lb-box{max-width:860px;width:100%;position:relative}
+.lb-box img{width:100%;border-radius:10px;max-height:82vh;object-fit:contain}
+.lb-x{position:absolute;top:-2.4rem;right:0;background:none;border:none;color:#fff;font-size:1.3rem;cursor:pointer;opacity:.7;transition:opacity .2s}
+.lb-x:hover{opacity:1}
+.lb-cap{text-align:center;margin-top:.9rem;color:rgba(255,255,255,.6);font-size:.84rem}
+
+/* REFERENCES */
+.ref-tabs{display:flex;gap:.4rem;margin:1.8rem 0 1.2rem;flex-wrap:wrap}
+.rtab{background:none;border:1px solid var(--border);color:var(--muted);padding:.35rem .9rem;border-radius:100px;font-size:.74rem;cursor:pointer;transition:all .2s;font-family:'Inter',sans-serif}
+.rtab.on{background:var(--blue);color:#fff;border-color:var(--blue)}
+.rsec{display:none}
+.rsec.on{display:block}
+.ref-list{list-style:none}
+.ref-list li{display:flex;gap:1rem;padding:1rem 0;border-bottom:1px solid var(--border);align-items:flex-start}
+.ref-list li:last-child{border:none}
+.rn{width:24px;height:24px;border-radius:5px;background:rgba(37,99,235,.1);border:1px solid rgba(37,99,235,.2);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:.7rem;font-weight:600;color:var(--blue3);flex-shrink:0}
+.rt{font-size:.84rem;line-height:1.65;color:rgba(226,232,240,.68)}
+.rt strong{color:var(--text);font-weight:500}
+.rlink{color:var(--accent);text-decoration:none;font-size:.76rem;display:inline-flex;align-items:center;gap:.2rem;margin-top:.2rem;transition:color .2s}
+.rlink:hover{color:var(--accent2)}
+.verified{display:inline-flex;align-items:center;gap:.4rem;background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.18);color:var(--green);font-size:.73rem;padding:.3rem .8rem;border-radius:6px;margin-bottom:1.4rem}
+
+/* RESOURCES */
+.rec-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem;margin-top:2rem}
+.rec{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.4rem;transition:all .3s;text-decoration:none;display:block;color:inherit}
+.rec:hover{border-color:rgba(6,182,212,.3);transform:translateY(-3px)}
+.rec-icon{font-size:1.7rem;margin-bottom:.7rem}
+.rec-t{font-family:'Syne',sans-serif;font-weight:600;font-size:.88rem;color:#fff;margin-bottom:.25rem}
+.rec-d{font-size:.78rem;color:var(--muted);line-height:1.5}
+
+/* CONTACT */
+.team-list{display:flex;flex-direction:column;gap:.9rem}
+.tm{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.1rem;display:flex;align-items:center;gap:1.1rem;transition:all .3s}
+.tm:hover{border-color:rgba(37,99,235,.3)}
+.tm-av{width:54px;height:54px;border-radius:50%;overflow:hidden;flex-shrink:0;border:2px solid var(--border)}
+.tm-av img{width:100%;height:100%;object-fit:cover}
+.tm-init{width:54px;height:54px;border-radius:50%;background:linear-gradient(135deg,var(--bg3),var(--bg4));display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:700;color:var(--blue3);font-size:1rem;flex-shrink:0;border:2px solid var(--border)}
+.tm-name{font-family:'Syne',sans-serif;font-weight:600;font-size:.86rem;color:#fff}
+.tm-email{font-size:.73rem;color:var(--muted);margin-top:.1rem}
+.tm-role{font-size:.7rem;color:var(--accent);margin-top:.15rem}
+.doc-card{background:var(--card);border:1px solid rgba(6,182,212,.18);border-radius:10px;padding:1.1rem;display:flex;align-items:center;gap:1.1rem;margin-top:.9rem}
+.doc-av{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--accent));display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:700;color:#fff;font-size:.95rem;flex-shrink:0}
+.cf .fg{margin-bottom:1rem}
+.cf label{display:block;font-size:.72rem;font-weight:500;color:var(--muted);margin-bottom:.35rem;letter-spacing:.06em;text-transform:uppercase}
+.cf input,.cf textarea{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:7px;padding:.75rem .9rem;color:var(--text);font-family:'Inter',sans-serif;font-size:.88rem;outline:none;resize:vertical;transition:border .2s}
+.cf input:focus,.cf textarea:focus{border-color:var(--blue2)}
+.cf textarea{min-height:110px}
+.loc{display:inline-flex;align-items:center;gap:.5rem;background:rgba(37,99,235,.07);border:1px solid rgba(37,99,235,.15);border-radius:7px;padding:.55rem .9rem;font-size:.78rem;color:rgba(226,232,240,.65);margin-top:1.2rem}
+
+/* FOOTER */
+footer{background:var(--bg);border-top:1px solid var(--border);padding:2.5rem 2rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1.2rem}
+.fl img{height:30px}
+.fm{text-align:center;font-size:.76rem;color:var(--muted)}
+.fr{text-align:right;font-size:.76rem;color:var(--muted)}
+
+/* STRIPE */
+.stripe{height:2px;background:linear-gradient(90deg,var(--blue),var(--accent),var(--blue));background-size:200% 100%;animation:stripe 3s linear infinite}
+@keyframes stripe{0%{background-position:0%}100%{background-position:200%}}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  nav{padding:.8rem 1.2rem}
+  .nav-links{display:none}
+  .ham{display:flex}
+  .sec{padding:4rem 1.2rem}
+  .sfull .inn{padding:0 1.2rem}
+  .grid2,.grid3,.grid4{grid-template-columns:1fr}
+  .stats{flex-wrap:wrap}
+  .stat{min-width:50%;border-right:none;border-bottom:1px solid var(--border)}
+  footer{flex-direction:column;text-align:center;padding:1.8rem 1.2rem}
+  .fr{text-align:center}
+}
+@media(max-width:520px){
+  .gal-grid{grid-template-columns:1fr}
+  .hero-h1{font-size:3rem}
+}
+</style>
+</head>
+<body>
+
+<div id="prog"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-brand">
+    <img src="img/logo.png" alt="ECOPASO">
+    <span>ECOPASO</span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#inicio">Inicio</a></li>
+    <li><a href="#sobre">Proyecto</a></li>
+    <li><a href="#objetivos">Objetivos</a></li>
+    <li><a href="#metodologia">Metodología</a></li>
+    <li><a href="#desarrollo">Desarrollo</a></li>
+    <li><a href="#resultados">Resultados</a></li>
+    <li><a href="#galeria">Galería</a></li>
+    <li><a href="#referencias">Referencias</a></li>
+    <li><a href="#contacto">Contacto</a></li>
+  </ul>
+  <button class="ham" id="hamBtn">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="mob" id="mob">
+  <a href="#inicio">Inicio</a><a href="#sobre">Proyecto</a><a href="#objetivos">Objetivos</a>
+  <a href="#metodologia">Metodología</a><a href="#desarrollo">Desarrollo</a>
+  <a href="#resultados">Resultados</a><a href="#galeria">Galería</a>
+  <a href="#referencias">Referencias</a><a href="#contacto">Contacto</a>
+</div>
+
+<div class="stripe"></div>
+
+<!-- HERO -->
+<section id="inicio">
+  <div class="hero-bg"></div>
+  <div class="hero-grid-bg"></div>
+  <div class="hero-inner">
+    <div class="badge fi"><span class="badge-dot"></span>Feria ExpoIndustria 4.0 · UFPS 2026</div>
+    <div class="hero-logo fi"><img src="img/logo2.png" alt="ECOPASO logo"></div>
+    <h1 class="hero-h1 fi"><span class="b">ECO</span><span class="a">PASO</span></h1>
+    <p class="hero-sub fi">Baldosa Ecológica con Propiedades Piezoeléctricas</p>
+    <p class="hero-tag fi">"Cada paso, una chispa"</p>
+    <p class="hero-p fi">Un prototipo de ingeniería que convierte la presión mecánica del tránsito peatonal en energía eléctrica — sin baterías, sin partes móviles, sin combustibles.</p>
+    <div class="cta fi">
+      <a href="#sobre" class="btn-main">▶ Explorar proyecto</a>
+      <a href="#galeria" class="btn-out">Ver galería →</a>
+    </div>
+    <div class="stats fi">
+      <div class="stat"><div class="stat-n">7<em>×</em></div><div class="stat-l">Sensores PZT</div></div>
+      <div class="stat"><div class="stat-n"><em>⬡</em></div><div class="stat-l">Hexagonal</div></div>
+      <div class="stat"><div class="stat-n">65<em>%</em></div><div class="stat-l">Resina epoxi</div></div>
+      <div class="stat"><div class="stat-n">1 <em>LED</em></div><div class="stat-l">Validado</div></div>
+      <div class="stat"><div class="stat-n"><em>0</em></div><div class="stat-l">Baterías</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- SOBRE -->
+<div id="sobre" class="sfull" style="background:var(--bg2)">
+<div class="inn">
+  <div class="stag fi">Contexto e introducción</div>
+  <h2 class="fi">Sobre el Proyecto</h2>
+  <div class="grid2">
+    <div class="fi">
+      <p>ECOPASO es un prototipo de baldosa ecológica piezoeléctrica desarrollado por estudiantes de Procesos Industriales I de la Universidad Francisco de Paula Santander (UFPS), Cúcuta. Nació como respuesta a un problema global: la dependencia energética de fuentes no renovables y el desperdicio de energía mecánica en espacios urbanos.</p>
+      <p>El sistema integra sensores cerámicos PZT en una estructura multicapa de resina epoxi con geometría hexagonal. Cada pisada deforma los sensores, generando una señal eléctrica que se rectifica y almacena en capacitores, capaz de activar un LED sin baterías ni mecanismos móviles.</p>
+      <p>La geometría hexagonal es una decisión de ingeniería: la teselación hexagonal permite cubrir cualquier superficie plana sin espacios intermedios con el perímetro mínimo por área, maximizando la captación de energía por metro cuadrado.</p>
+      <p><strong style="color:#fff">Público objetivo:</strong> Arquitectos, ingenieros urbanos, investigadores en energías renovables e instituciones con alto flujo peatonal.</p>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.9rem" class="fi">
+      <div class="card"><div class="data-n">80%</div><div class="data-d">de la energía mundial proviene de combustibles fósiles</div><div class="data-s">IEA, 2023</div></div>
+      <div class="card"><div class="data-n">675M</div><div class="data-d">personas sin acceso confiable a electricidad</div><div class="data-s">ONU/BM, 2023</div></div>
+      <div class="card"><div class="data-n">~5μJ</div><div class="data-d">energía típica por pisada en sistemas PZT unimorph</div><div class="data-s">Granstrom et al., 2007</div></div>
+      <div class="card"><div class="data-n">PZT</div><div class="data-d">mayor constante piezoeléctrica en cerámicas comerciales</div><div class="data-s">Jaffe et al., 1971</div></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- OBJETIVOS -->
+<section id="objetivos" class="sec">
+  <div class="stag fi">Propósito del proyecto</div>
+  <h2 class="fi">Objetivos</h2>
+  <div class="grid2">
+    <div class="fi">
+      <div class="obj-main">
+        <div class="obj-label">Objetivo General</div>
+        <h3 style="font-size:1rem;line-height:1.5">Diseñar y construir una baldosa ecológica hexagonal de estructura multicapa con propiedades piezoeléctricas, capaz de capturar la energía mecánica del tránsito peatonal y convertirla en energía eléctrica funcional.</h3>
+      </div>
+    </div>
+    <div class="fi">
+      <div class="obj-label" style="font-size:.68rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:.5rem">Objetivos Específicos</div>
+      <ul class="obj-list">
+        <li>Seleccionar sensores PZT unimorph para captación de energía por deformación de pisada.</li>
+        <li>Diseñar el circuito piezoeléctrico en configuración paralela con 7 sensores.</li>
+        <li>Evaluar materiales de relleno compatibles con la resina epoxi.</li>
+        <li>Desarrollar la estructura multicapa de encapsulado protector.</li>
+        <li>Determinar la proporción óptima resina/catalizador (65/35).</li>
+        <li>Validar funcionalmente el prototipo mediante activación del LED.</li>
+        <li>Justificar la geometría hexagonal como criterio de eficiencia en superficie.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- METODOLOGIA -->
+<div id="metodologia" class="sfull" style="background:var(--bg2)">
+<div class="inn">
+  <div class="stag fi">Proceso de desarrollo</div>
+  <h2 class="fi">Metodología</h2>
+  <p class="fi" style="max-width:660px">Investigación aplicada de tipo experimental. Ciclo de diseño → prototipado → evaluación → iteración hasta la validación funcional.</p>
+  <div class="steps fi">
+    <div class="step"><div class="snum">01</div><div class="scont"><div class="t">Diseño hexagonal — eficiencia de cobertura</div><div class="d">La geometría hexagonal se seleccionó basándose en el Teorema del Panal (Hales, 2001): la teselación hexagonal regular cubre una superficie plana sin intersticios con el menor perímetro posible por unidad de área, maximizando la densidad de sensores por m².</div></div></div>
+    <div class="step"><div class="snum">02</div><div class="scont"><div class="t">Selección de sensores PZT unimorph</div><div class="d">Se eligieron discos unimorph PZT de 20 mm (P-81) por su relación óptima entre tamaño, sensibilidad y costo. La estructura unimorph favorece la deflexión máxima bajo carga distribuida como la producida por una pisada.</div></div></div>
+    <div class="step"><div class="snum">03</div><div class="scont"><div class="t">Circuito piezoeléctrico en paralelo</div><div class="d">7 módulos PZT en configuración paralela suman las corrientes individuales, incrementando la carga acumulada en los capacitores. Un diodo de rectificación convierte la señal alterna piezoeléctrica en corriente continua.</div></div></div>
+    <div class="step"><div class="snum">04</div><div class="scont"><div class="t">Evaluación de materiales de relleno</div><div class="d">Se evaluaron: (a) PET picado — descartado por flotación durante el curado; (b) Aserrín — descartado por absorción excesiva de resina; (c) Caucho triturado — seleccionado por compatibilidad de densidad, flexibilidad y amortiguación.</div></div></div>
+    <div class="step"><div class="snum">05</div><div class="scont"><div class="t">Formulación del encapsulado (65% resina / 35% catalizador)</div><div class="d">La proporción 65/35 reduce la rigidez del material final respecto a la mezcla estándar, permitiendo que los sensores se deformen bajo carga. La flexibilidad del encapsulado es condición necesaria para generar voltaje.</div></div></div>
+    <div class="step"><div class="snum">06</div><div class="scont"><div class="t">Ensamble en estructura multicapa</div><div class="d">El circuito no se sumerge en la resina. Arquitectura estratificada: capa base de resina → circuito piezoeléctrico → capa superior protectora. Aísla los componentes de la reacción exotérmica del curado (60–80°C).</div></div></div>
+    <div class="step"><div class="snum">07</div><div class="scont"><div class="t">Validación funcional por pisada</div><div class="d">El prototipo fue sometido a pruebas de carga peatonal. La activación del LED confirmó que el sistema genera, rectifica y acumula suficiente carga eléctrica a partir de las pisadas.</div></div></div>
+  </div>
+</div>
+</div>
+
+<!-- DESARROLLO -->
+<section id="desarrollo" class="sec">
+  <div class="stag fi">Contenido técnico</div>
+  <h2 class="fi">Desarrollo del Proyecto</h2>
+  <div class="grid2">
+    <div class="card fi"><div class="card-icon">⚡</div><h3>El Efecto Piezoeléctrico</h3><p>Descubierto por los hermanos Curie en 1880: ciertos materiales generan carga eléctrica al deformarse mecánicamente. En ECOPASO, la presión de una pisada deforma los discos PZT, desplazando las cargas dentro de la celda cristalina y generando una diferencia de potencial eléctrico.</p></div>
+    <div class="card fi"><div class="card-icon">🔬</div><h3>Materiales PZT — Pb(Zr,Ti)O₃</h3><p>El titanato zirconato de plomo es la cerámica piezoeléctrica más usada por su constante piezoeléctrica excepcional (d₃₃ entre 200–700 pC/N). Su estructura tipo perovskita ABO₃ permite alta sensibilidad a la deformación mecánica, ideal para entornos de baja frecuencia como el tránsito peatonal.</p></div>
+    <div class="card fi"><div class="card-icon">⬡</div><h3>Geometría Hexagonal</h3><p>El Teorema del Panal (Hales, 2001) demuestra que la teselación hexagonal minimiza el perímetro total por unidad de área. Una instalación hexagonal en pavimento cubre la misma superficie con más densidad de sensores activos por m² que baldosas cuadradas o triangulares.</p></div>
+    <div class="card fi"><div class="card-icon">▤</div><h3>Estructura Multicapa</h3><p>La resina epoxi libera calor (60–80°C) durante el curado. El contacto directo con el circuito puede dañar soldaduras y sensores. La estructura multicapa crea una barrera térmica protectora, preservando la integridad del sistema electrónico.</p></div>
+  </div>
+  <div class="fi">
+    <h3 style="margin-top:2.5rem;margin-bottom:.5rem">Especificaciones Técnicas</h3>
+    <table class="ttable">
+      <tr><th>Parámetro</th><th>Especificación</th><th>Justificación</th></tr>
+      <tr><td class="hl">Tipo de sensor</td><td>Unimorph PZT 20 mm (P-81)</td><td>Mayor deflexión bajo carga de baja frecuencia</td></tr>
+      <tr><td class="hl">Cantidad</td><td>7 unidades</td><td>Configuración óptima determinada experimentalmente</td></tr>
+      <tr><td class="hl">Configuración</td><td>Paralelo</td><td>Maximiza corriente acumulada</td></tr>
+      <tr><td class="hl">Encapsulado</td><td>65% resina / 35% catalizador</td><td>Mantiene flexibilidad para deformación</td></tr>
+      <tr><td class="hl">Relleno</td><td>Caucho triturado</td><td>Compatibilidad y flexibilidad estructural</td></tr>
+      <tr><td class="hl">Geometría</td><td>Hexagonal regular</td><td>Eficiencia máxima de cobertura (Hales, 2001)</td></tr>
+      <tr><td class="hl">Ensamble</td><td>Estructura multicapa</td><td>Aislamiento térmico durante el curado</td></tr>
+      <tr><td class="hl">Almacenamiento</td><td>Capacitores cerámicos</td><td>Acumulan carga de múltiples pisadas</td></tr>
+      <tr><td class="hl">Rectificación</td><td>Diodo de rectificación</td><td>Convierte CA piezoeléctrica en CC</td></tr>
+      <tr><td class="hl">Carga de prueba</td><td>LED indicador rojo</td><td>Validación funcional a escala de laboratorio</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- RESULTADOS -->
+<div id="resultados" class="sfull" style="background:var(--bg2)">
+<div class="inn">
+  <div class="stag fi">Logros alcanzados</div>
+  <h2 class="fi">Resultados</h2>
+  <div class="grid3">
+    <div class="res-card fi"><div class="res-n">01</div><div class="res-t">La geometría hexagonal optimiza el recubrimiento de superficies peatonales, maximizando la captación de energía mecánica por metro cuadrado sin generar espacios de desperdicio.</div></div>
+    <div class="res-card fi"><div class="res-n">02</div><div class="res-t">La configuración de 7 sensores unimorph PZT en paralelo demostró ser óptima para la transducción de energía mecánica en eléctrica, acumulando carga suficiente para activar el LED.</div></div>
+    <div class="res-card fi"><div class="res-n">03</div><div class="res-t">La estructura multicapa protege la integridad del circuito frente a la reacción exotérmica de la resina, garantizando la durabilidad y funcionalidad del prototipo.</div></div>
+  </div>
+  <div class="vid-wrap fi">
+    <video controls preload="metadata">
+      <source src="img/prueba.mp4" type="video/mp4">
+      Tu navegador no soporta video HTML5.
+    </video>
+    <div class="vid-cap"><strong>Video de prueba:</strong> Sistema piezoeléctrico activando un LED mediante presión manual — validación del principio de funcionamiento.</div>
+  </div>
+</div>
+</div>
+
+<!-- GALERIA -->
+<section id="galeria" class="sec">
+  <div class="stag fi">Evidencia fotográfica</div>
+  <h2 class="fi">Galería del Proyecto</h2>
+  <div class="gal-tabs fi">
+    <button class="gtab on" data-f="all">Todo</button>
+    <button class="gtab" data-f="proceso">Proceso</button>
+    <button class="gtab" data-f="circuito">Circuito</button>
+    <button class="gtab" data-f="resina">Resina</button>
+  </div>
+  <div class="gal-grid" id="galGrid">
+    <div class="gal-item fi" data-c="proceso" onclick="openLb(this)">
+      <img src="img/pet.jpg" alt="Picando PET a tijera">
+      <div class="gal-info"><div class="gal-t">Evaluación de relleno — PET</div><div class="gal-d">Proceso de picado del PET para evaluarlo como relleno. Fue descartado por flotación en la resina.</div><span class="gal-badge">Proceso</span></div>
+    </div>
+    <div class="gal-item fi" data-c="circuito" onclick="openLb(this)">
+      <img src="img/circuito.jpg" alt="Ensamble del circuito">
+      <div class="gal-info"><div class="gal-t">Ensamble del circuito</div><div class="gal-d">El equipo trabaja en el ensamble y medición del circuito piezoeléctrico con multímetro en el laboratorio.</div><span class="gal-badge">Circuito</span></div>
+    </div>
+    <div class="gal-item fi" data-c="resina" onclick="openLb(this)">
+      <img src="img/resina_mal.jpg" alt="Primera muestra resina + PET">
+      <div class="gal-info"><div class="gal-t">Primera muestra: resina + PET ✗</div><div class="gal-d">Resultado fallido. El PET flotó durante el curado generando distribución irregular y exceso de rigidez.</div><span class="gal-badge">Resina</span></div>
+    </div>
+    <div class="gal-item fi" data-c="circuito" onclick="openLb(this)">
+      <img src="img/circuito_func.jpg" alt="Circuito funcional">
+      <div class="gal-info"><div class="gal-t">Primer circuito funcional</div><div class="gal-d">Prototipo del circuito piezoeléctrico sobre base de cartón. Sensores PZT en paralelo con capacitores y diodo rectificador.</div><span class="gal-badge">Circuito</span></div>
+    </div>
+    <div class="gal-item fi" data-c="resina" onclick="openLb(this)">
+      <img src="img/resina_bien.jpg" alt="Muestra exitosa resina + caucho">
+      <div class="gal-info"><div class="gal-t">Primera muestra: resina + caucho ✓</div><div class="gal-d">Resultado exitoso. El caucho triturado presenta flexibilidad adecuada y distribución homogénea en la resina.</div><span class="gal-badge">Resina</span></div>
+    </div>
+    <div class="gal-item fi" data-c="proceso" onclick="openLb(this)">
+      <img src="img/molde.jpg" alt="Baldosa en molde hexagonal">
+      <div class="gal-info"><div class="gal-t">Baldosa en molde hexagonal</div><div class="gal-d">Vista superior del molde hexagonal durante el ensamble multicapa con resina, caucho y sensores PZT.</div><span class="gal-badge">Proceso</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- LIGHTBOX -->
+<div class="lb" id="lb" onclick="closeLb(event)">
+  <div class="lb-box">
+    <button class="lb-x" onclick="closeLb()">✕</button>
+    <img id="lbImg" src="" alt="">
+    <div class="lb-cap" id="lbCap"></div>
+  </div>
+</div>
+
+<!-- REFERENCIAS -->
+<div id="referencias" class="sfull" style="background:var(--bg2)">
+<div class="inn">
+  <div class="stag fi">Fuentes consultadas</div>
+  <h2 class="fi">Referencias Bibliográficas</h2>
+  <div class="verified fi">✓ Todas las fuentes han sido verificadas y corresponden a publicaciones académicas confiables</div>
+  <div class="ref-tabs fi">
+    <button class="rtab on" data-r="libros">Libros</button>
+    <button class="rtab" data-r="articulos">Artículos científicos</button>
+    <button class="rtab" data-r="web">Fuentes web</button>
+  </div>
+  <div class="rsec on" id="ref-libros">
+    <ul class="ref-list fi">
+      <li><div class="rn">1</div><div><div class="rt"><strong>Jaffe, B., Cook, W. R., &amp; Jaffe, H. (1971).</strong> Piezoelectric Ceramics. Academic Press, London. Texto fundacional sobre materiales PZT y comportamiento piezoeléctrico de cerámicas tipo perovskita.</div></div></li>
+      <li><div class="rn">2</div><div><div class="rt"><strong>Priya, S., &amp; Inman, D. J. (Eds.) (2009).</strong> Energy Harvesting Technologies. Springer, New York. ISBN 978-0-387-76463-4. Referencia sobre captación de energía piezoeléctrica en superficies de alto tránsito.<br><a href="https://doi.org/10.1007/978-0-387-76464-1" target="_blank" class="rlink">↗ doi.org/10.1007/978-0-387-76464-1</a></div></div></li>
+      <li><div class="rn">3</div><div><div class="rt"><strong>Hales, T. C. (2001).</strong> The Honeycomb Conjecture. Discrete &amp; Computational Geometry, 25(1), 1–22. Springer. Demostración de la eficiencia óptima de la teselación hexagonal.<br><a href="https://doi.org/10.1007/s004540010071" target="_blank" class="rlink">↗ doi.org/10.1007/s004540010071</a></div></div></li>
+    </ul>
+  </div>
+  <div class="rsec" id="ref-articulos">
+    <ul class="ref-list fi">
+      <li><div class="rn">4</div><div><div class="rt"><strong>Curie, J., &amp; Curie, P. (1880).</strong> Développement par compression de l'électricité polaire dans les cristaux hémièdres à faces inclinées. Bulletin de la Société Minéralogique de France, 3, 90–93. Artículo original del descubrimiento del efecto piezoeléctrico.</div></div></li>
+      <li><div class="rn">5</div><div><div class="rt"><strong>Anton, S. R., &amp; Sodano, H. A. (2007).</strong> A review of power harvesting using piezoelectric materials (2003–2006). Smart Materials and Structures, 16(3), R1–R21.<br><a href="https://doi.org/10.1088/0964-1726/16/3/R01" target="_blank" class="rlink">↗ doi.org/10.1088/0964-1726/16/3/R01</a></div></div></li>
+      <li><div class="rn">6</div><div><div class="rt"><strong>Granstrom, J., Feenstra, J., Sodano, H. A., &amp; Farinholt, K. (2007).</strong> Energy harvesting from a backpack instrumented with piezoelectric shoulder straps. Smart Materials and Structures, 16(5), 1810–1820.<br><a href="https://doi.org/10.1088/0964-1726/16/5/036" target="_blank" class="rlink">↗ doi.org/10.1088/0964-1726/16/5/036</a></div></div></li>
+    </ul>
+  </div>
+  <div class="rsec" id="ref-web">
+    <ul class="ref-list fi">
+      <li><div class="rn">7</div><div><div class="rt"><strong>IEA (2023).</strong> World Energy Outlook 2023. International Energy Agency, Paris.<br><a href="https://www.iea.org/reports/world-energy-outlook-2023" target="_blank" class="rlink">↗ iea.org/reports/world-energy-outlook-2023</a></div></div></li>
+      <li><div class="rn">8</div><div><div class="rt"><strong>ONU / Banco Mundial (2023).</strong> Tracking SDG 7: The Energy Progress Report 2023. Base de datos de acceso a electricidad por región.<br><a href="https://trackingsdg7.esmap.org" target="_blank" class="rlink">↗ trackingsdg7.esmap.org</a></div></div></li>
+      <li><div class="rn">9</div><div><div class="rt"><strong>UFPS (2026).</strong> Programa de Ingeniería Industrial / Tecnología en Procesos Industriales. Feria ExpoIndustria 4.0. Cúcuta, Colombia.<br><a href="https://www.ufps.edu.co" target="_blank" class="rlink">↗ ufps.edu.co</a></div></div></li>
+    </ul>
+  </div>
+</div>
+</div>
+
+<!-- RECURSOS -->
+<section id="recursos" class="sec">
+  <div class="stag fi">Material adicional</div>
+  <h2 class="fi">Recursos Adicionales</h2>
+  <div class="rec-grid">
+    <div class="rec fi" style="cursor:default"><div class="rec-icon">📊</div><div class="rec-t">Póster científico</div><div class="rec-d">Póster oficial presentado en la Feria ExpoIndustria 4.0 UFPS 2026 con toda la información técnica.</div></div>
+    <a class="rec fi" href="https://doi.org/10.1088/0964-1726/16/3/R01" target="_blank"><div class="rec-icon">📄</div><div class="rec-t">Anton &amp; Sodano (2007)</div><div class="rec-d">Revisión del estado del arte en captación de energía piezoeléctrica. Lectura recomendada.</div></a>
+    <a class="rec fi" href="https://www.iea.org/reports/world-energy-outlook-2023" target="_blank"><div class="rec-icon">🌍</div><div class="rec-t">IEA World Energy Outlook</div><div class="rec-d">Informe completo de la Agencia Internacional de Energía sobre el panorama energético global 2023.</div></a>
+    <a class="rec fi" href="https://trackingsdg7.esmap.org" target="_blank"><div class="rec-icon">⚡</div><div class="rec-t">Tracking SDG 7</div><div class="rec-d">Portal oficial de seguimiento del ODS 7: energía asequible y no contaminante.</div></a>
+    <a class="rec fi" href="https://doi.org/10.1007/s004540010071" target="_blank"><div class="rec-icon">⬡</div><div class="rec-t">Teorema del Panal — Hales</div><div class="rec-d">Base matemática de la geometría hexagonal aplicada en ECOPASO.</div></a>
+    <div class="rec fi" style="cursor:default"><div class="rec-icon">🎥</div><div class="rec-t">Video de prueba</div><div class="rec-d">Demostración del prototipo activando un LED por presión. Disponible en la sección Resultados.</div></div>
+  </div>
+</section>
+
+<!-- CONTACTO -->
+<div id="contacto" class="sfull" style="background:var(--bg2)">
+<div class="inn">
+  <div class="stag fi">Equipo e información</div>
+  <h2 class="fi">Contacto</h2>
+  <div class="grid2">
+    <div class="fi">
+      <h3 style="margin-bottom:1.1rem">Equipo ECOPASO</h3>
+      <div class="team-list">
+        <div class="tm">
+          <div class="tm-av"><img src="img/diego_r.jpg" alt="Diego Ramírez"></div>
+          <div><div class="tm-name">Diego Andrés Ramírez Sánchez</div><div class="tm-email">diegoandresrs@ufps.edu.co</div><div class="tm-role">Procesos Industriales I · UFPS</div></div>
+        </div>
+        <div class="tm">
+          <div class="tm-av"><img src="img/diego_t.jpg" alt="Diego Torrado"></div>
+          <div><div class="tm-name">Diego Fernando Torrado Guevara</div><div class="tm-email">diegofernandotg@ufps.edu.co</div><div class="tm-role">Procesos Industriales I · UFPS</div></div>
+        </div>
+        <div class="tm">
+          <div class="tm-av"><img src="img/mariana.jpg" alt="Lidsay Ramírez"></div>
+          <div><div class="tm-name">Lidsay Mariana Ramírez Ovallos</div><div class="tm-email">lidsaymarianaro@ufps.edu.co</div><div class="tm-role">Procesos Industriales I · UFPS</div></div>
+        </div>
+      </div>
+      <div class="doc-card">
+        <div class="doc-av">SO</div>
+        <div><div style="font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);font-weight:500">Docente</div><div style="font-family:'Syne',sans-serif;font-weight:600;color:#fff;margin-top:.1rem">Silvia Juliana Orozco</div><div style="font-size:.78rem;color:var(--muted);margin-top:.15rem">Procesos Industriales I · UFPS 2026</div></div>
+      </div>
+      <div class="loc">📍 Universidad Francisco de Paula Santander · Cúcuta, Norte de Santander, Colombia</div>
+    </div>
+    <div class="cf fi">
+      <h3 style="margin-bottom:1.3rem">Envíanos un mensaje</h3>
+      <div class="fg"><label>Nombre</label><input type="text" placeholder="Tu nombre completo"></div>
+      <div class="fg"><label>Correo electrónico</label><input type="email" placeholder="tu@correo.com"></div>
+      <div class="fg"><label>Asunto</label><input type="text" placeholder="¿Sobre qué quieres escribirnos?"></div>
+      <div class="fg"><label>Mensaje</label><textarea placeholder="Escribe tu mensaje aquí..."></textarea></div>
+      <button class="btn-main" style="width:100%;justify-content:center" onclick="alert('Gracias por tu mensaje. Puedes escribirnos directamente a diegoandresrs@ufps.edu.co')">Enviar mensaje</button>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="fl"><img src="img/logo.png" alt="ECOPASO"></div>
+  <div class="fm">ECOPASO · ExpoIndustria 4.0 · UFPS 2026<br><span style="font-size:.7rem;opacity:.5">"Cada paso, una chispa" · Procesos Industriales I</span></div>
+  <div class="fr">Universidad Francisco de Paula Santander<br>Cúcuta, Norte de Santander, Colombia</div>
+</footer>
+
+<button id="btt" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+// PROGRESS BAR
+var prog=document.getElementById('prog');
+window.addEventListener('scroll',function(){
+  var h=document.documentElement;
+  prog.style.width=((window.scrollY/(h.scrollHeight-h.clientHeight))*100)+'%';
+});
+
+// BACK TO TOP
+var btt=document.getElementById('btt');
+window.addEventListener('scroll',function(){
+  btt.className=window.scrollY>400?'show':'';
+});
+
+// HAMBURGER
+var ham=document.getElementById('hamBtn'),mob=document.getElementById('mob');
+ham.addEventListener('click',function(){mob.classList.toggle('open')});
+mob.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){mob.classList.remove('open')})});
+
+// FADE IN ON SCROLL
+var fiEls=document.querySelectorAll('.fi');
+var obs=new IntersectionObserver(function(entries){
+  entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');obs.unobserve(e.target)}});
+},{threshold:0.1});
+fiEls.forEach(function(el){obs.observe(el)});
+
+// GALLERY FILTER
+document.querySelectorAll('.gtab').forEach(function(btn){
+  btn.addEventListener('click',function(){
+    document.querySelectorAll('.gtab').forEach(function(b){b.classList.remove('on')});
+    this.classList.add('on');
+    var f=this.dataset.f;
+    document.querySelectorAll('.gal-item').forEach(function(item){
+      item.style.display=(f==='all'||item.dataset.c===f)?'block':'none';
+    });
+  });
+});
+
+// LIGHTBOX
+function openLb(el){
+  var img=el.querySelector('img');
+  var cap=el.querySelector('.gal-t').textContent+' — '+el.querySelector('.gal-d').textContent;
+  document.getElementById('lbImg').src=img.src;
+  document.getElementById('lbCap').textContent=cap;
+  document.getElementById('lb').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeLb(e){
+  if(!e||e.target===document.getElementById('lb')||e.target.classList.contains('lb-x')){
+    document.getElementById('lb').classList.remove('open');
+    document.body.style.overflow='';
+  }
+}
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeLb({target:document.getElementById('lb')})});
+
+// REFERENCE TABS
+document.querySelectorAll('.rtab').forEach(function(btn){
+  btn.addEventListener('click',function(){
+    document.querySelectorAll('.rtab').forEach(function(b){b.classList.remove('on')});
+    document.querySelectorAll('.rsec').forEach(function(s){s.classList.remove('on')});
+    this.classList.add('on');
+    document.getElementById('ref-'+this.dataset.r).classList.add('on');
+  });
+});
+</script>
+</body>
+</html>
