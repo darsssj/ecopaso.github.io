@@ -1,0 +1,1361 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="ECOPASO - Baldosa Ecológica Piezoeléctrica. Convierte pisadas en energía eléctrica. UFPS 2026.">
+<title>ECOPASO | Baldosa Ecológica Piezoeléctrica</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:rgb(8,10,20);
+  --bg2:rgb(12,16,30);
+  --bg3:rgb(16,22,42);
+  --bg4:rgb(20,28,52);
+  --blue:rgb(37,99,235);
+  --blue2:rgb(59,130,246);
+  --blue3:rgb(147,197,253);
+  --accent:rgb(6,182,212);
+  --accent2:rgb(34,211,238);
+  --green:rgb(16,185,129);
+  --green2:rgb(52,211,153);
+  --neon:rgb(0,255,180);
+  --text:rgb(226,232,240);
+  --muted:rgb(100,116,139);
+  --border:rgba(37,99,235,0.18);
+  --card:rgb(14,20,38);
+  --red:rgb(239,68,68);
+  --red2:rgb(252,165,165);
+}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;line-height:1.6}
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--blue);border-radius:3px}
+
+/* CURSOR GLOW */
+.cursor-glow{position:fixed;width:320px;height:320px;border-radius:50%;background:radial-gradient(circle,rgba(37,99,235,.06) 0%,transparent 70%);pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:opacity .3s;mix-blend-mode:screen}
+
+/* PROGRESS */
+#prog{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--blue),var(--accent),var(--neon));z-index:9999;width:0;transition:width .1s;box-shadow:0 0 8px var(--accent)}
+
+/* BACK TOP */
+#btt{position:fixed;bottom:1.5rem;right:1.5rem;width:42px;height:42px;background:var(--blue);border:none;border-radius:50%;color:#fff;font-size:1rem;cursor:pointer;z-index:500;opacity:0;transform:translateY(16px);transition:all .3s;display:flex;align-items:center;justify-content:center;box-shadow:0 0 16px rgba(37,99,235,.4)}
+#btt.show{opacity:1;transform:translateY(0)}
+#btt:hover{background:var(--blue2);transform:translateY(-4px);box-shadow:0 0 24px rgba(37,99,235,.6)}
+
+/* EXPO BANNER */
+#expo-banner{
+  background:linear-gradient(135deg,rgba(8,16,40,.98) 0%,rgba(6,12,30,.98) 100%);
+  border-bottom:1px solid rgba(37,99,235,.3);
+  padding:.6rem 2rem;
+  display:flex;align-items:center;justify-content:space-between;gap:1rem;
+  position:relative;overflow:hidden;
+  margin-top:58px; /* below fixed nav */
+}
+#expo-banner::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent 0%,rgba(37,99,235,.04) 50%,transparent 100%);
+  animation:bannerShine 4s ease-in-out infinite;
+}
+@keyframes bannerShine{0%,100%{opacity:0}50%{opacity:1}}
+.banner-expo{display:flex;align-items:center;gap:1rem}
+.banner-expo img{height:36px;object-fit:contain;filter:drop-shadow(0 0 6px rgba(37,99,235,.4))}
+.banner-text{font-size:.72rem;color:rgba(226,232,240,.6);letter-spacing:.06em;text-transform:uppercase}
+.banner-text strong{color:var(--accent);font-weight:600}
+.banner-ufps img{height:32px;object-fit:contain;filter:brightness(0) invert(1) drop-shadow(0 0 4px rgba(255,255,255,.2));opacity:.75}
+.banner-line{height:1px;width:60px;background:linear-gradient(90deg,transparent,var(--blue),transparent);animation:lineMove 2s ease-in-out infinite}
+@keyframes lineMove{0%,100%{opacity:.3}50%{opacity:1}}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;justify-content:space-between;align-items:center;padding:.9rem 2rem;background:rgba(8,10,20,.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.nav-brand{display:flex;align-items:center;gap:.8rem}
+.nav-brand img{height:34px;object-fit:contain}
+.nav-brand span{font-family:'Syne',sans-serif;font-weight:700;font-size:1.1rem;color:#fff}
+.ham{display:flex;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:.3rem;position:relative}
+.ham span{width:22px;height:2px;background:var(--text);border-radius:2px;transition:all .35s cubic-bezier(.68,-.55,.27,1.55);display:block}
+.ham.active span:nth-child(1){transform:translateY(7px) rotate(45deg);background:var(--accent)}
+.ham.active span:nth-child(2){opacity:0;transform:scaleX(0)}
+.ham.active span:nth-child(3){transform:translateY(-7px) rotate(-45deg);background:var(--accent)}
+.mob{display:none;position:fixed;top:58px;left:0;right:0;background:rgba(8,10,22,.99);border-bottom:1px solid var(--border);z-index:199;padding:0;flex-direction:column;overflow:hidden;max-height:0;transition:max-height .4s cubic-bezier(.4,0,.2,1)}
+.mob.open{display:flex;max-height:600px}
+.mob a{font-size:.82rem;color:var(--text);text-decoration:none;letter-spacing:.05em;text-transform:uppercase;padding:.75rem 2rem;border-bottom:1px solid var(--border);transition:all .2s;display:flex;align-items:center;gap:.6rem;transform:translateX(-20px);opacity:0}
+.mob.open a{transform:translateX(0);opacity:1}
+.mob.open a:nth-child(1){transition-delay:.05s}
+.mob.open a:nth-child(2){transition-delay:.08s}
+.mob.open a:nth-child(3){transition-delay:.11s}
+.mob.open a:nth-child(4){transition-delay:.14s}
+.mob.open a:nth-child(5){transition-delay:.17s}
+.mob.open a:nth-child(6){transition-delay:.20s}
+.mob.open a:nth-child(7){transition-delay:.23s}
+.mob.open a:nth-child(8){transition-delay:.26s}
+.mob.open a:nth-child(9){transition-delay:.29s}
+.mob.open a:nth-child(10){transition-delay:.32s}
+.mob a:hover{color:var(--accent);background:rgba(37,99,235,.07);padding-left:2.4rem}
+.mob a:last-child{border:none}
+.mob a::before{content:'›';color:var(--blue2);opacity:0;transition:opacity .2s}
+.mob a:hover::before{opacity:1}
+
+/* HERO */
+#inicio{min-height:100vh;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;padding:4rem 2rem 4rem;text-align:center}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 50% 40%,rgba(37,99,235,.14) 0%,transparent 70%),radial-gradient(ellipse 40% 35% at 20% 70%,rgba(6,182,212,.07) 0%,transparent 60%),var(--bg)}
+.hero-grid-bg{position:absolute;inset:0;background-image:linear-gradient(rgba(37,99,235,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(37,99,235,.05) 1px,transparent 1px);background-size:50px 50px;mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 20%,transparent 100%)}
+#hero-canvas{position:absolute;inset:0;pointer-events:none;z-index:0}
+.hero-inner{position:relative;max-width:860px;z-index:1}
+.badge{display:inline-flex;align-items:center;gap:.5rem;background:rgba(37,99,235,.1);border:1px solid rgba(37,99,235,.25);color:var(--blue3);font-size:.7rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;padding:.35rem 1rem;border-radius:100px;margin-bottom:1.8rem;animation:badgePulse 3s ease-in-out infinite}
+@keyframes badgePulse{0%,100%{box-shadow:0 0 0 0 rgba(37,99,235,.2)}50%{box-shadow:0 0 0 6px rgba(37,99,235,.0)}}
+.badge-dot{width:6px;height:6px;background:var(--accent);border-radius:50%;animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+.hero-logo{width:180px;margin:0 auto 1.5rem;animation:float 6s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.hero-logo img{width:100%;object-fit:contain;filter:drop-shadow(0 0 20px rgba(37,99,235,.35))}
+.hero-h1{font-family:'Syne',sans-serif;font-size:clamp(3.5rem,9vw,7rem);font-weight:800;line-height:.9;letter-spacing:-.04em;color:#fff}
+.hero-h1 .b{color:var(--blue2);text-shadow:0 0 30px rgba(59,130,246,.3)}
+.hero-h1 .a{color:var(--accent);text-shadow:0 0 30px rgba(6,182,212,.3)}
+.hero-sub{font-family:'Syne',sans-serif;font-size:clamp(1rem,2.5vw,1.4rem);font-weight:500;color:rgba(226,232,240,.5);margin-top:.6rem;letter-spacing:-.01em}
+.hero-tag{font-size:.82rem;font-style:italic;color:rgba(6,182,212,.7);margin-top:.8rem}
+.hero-p{margin-top:1.4rem;font-size:.98rem;color:rgba(226,232,240,.65);max-width:580px;margin-inline:auto;line-height:1.75}
+.cta{margin-top:2.5rem;display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+.btn-main{background:var(--blue);color:#fff;padding:.8rem 1.8rem;border-radius:6px;text-decoration:none;font-weight:500;font-size:.88rem;transition:all .25s;display:inline-flex;align-items:center;gap:.4rem;border:none;cursor:pointer;position:relative;overflow:hidden}
+.btn-main::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.15) 0%,transparent 50%);opacity:0;transition:opacity .2s}
+.btn-main:hover{background:var(--blue2);transform:translateY(-3px);box-shadow:0 8px 28px rgba(37,99,235,.4)}
+.btn-main:hover::after{opacity:1}
+.btn-main:active{transform:scale(.97)}
+.btn-main .ripple{position:absolute;border-radius:50%;background:rgba(255,255,255,.3);transform:scale(0);animation:rippleAnim .6s linear;pointer-events:none}
+@keyframes rippleAnim{to{transform:scale(4);opacity:0}}
+.btn-out{border:1px solid rgba(226,232,240,.15);color:var(--text);padding:.8rem 1.8rem;border-radius:6px;text-decoration:none;font-weight:400;font-size:.88rem;transition:all .25s}
+.btn-out:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-3px);box-shadow:0 8px 28px rgba(6,182,212,.15)}
+.stats{margin-top:3.5rem;display:flex;border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.stat{flex:1;padding:1.3rem .8rem;border-right:1px solid var(--border);text-align:center;transition:background .3s}
+.stat:hover{background:rgba(37,99,235,.05)}
+.stat:last-child{border-right:none}
+.stat-n{font-family:'Syne',sans-serif;font-size:1.7rem;font-weight:800;color:#fff;line-height:1}
+.stat-n em{color:var(--accent);font-style:normal}
+.stat-l{font-size:.65rem;color:var(--muted);margin-top:.25rem;letter-spacing:.06em;text-transform:uppercase}
+
+/* FADE IN */
+.fi{opacity:0;transform:translateY(24px);transition:opacity .7s cubic-bezier(.4,0,.2,1),transform .7s cubic-bezier(.4,0,.2,1)}
+.fi.in{opacity:1;transform:none}
+.fi[data-delay="1"]{transition-delay:.1s}
+.fi[data-delay="2"]{transition-delay:.2s}
+.fi[data-delay="3"]{transition-delay:.3s}
+.fi[data-delay="4"]{transition-delay:.4s}
+
+/* SECTION */
+.sec{padding:5.5rem 2rem;max-width:1200px;margin-inline:auto}
+.sfull{padding:5.5rem 0}
+.sfull .inn{max-width:1200px;margin-inline:auto;padding:0 2rem}
+.stag{font-size:.68rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:.6rem;display:flex;align-items:center;gap:.5rem}
+.stag::before{content:'';width:18px;height:1px;background:var(--accent)}
+h2{font-family:'Syne',sans-serif;font-size:clamp(1.8rem,3.5vw,2.6rem);font-weight:700;color:#fff;line-height:1.1;letter-spacing:-.02em;margin-bottom:.8rem}
+h3{font-family:'Syne',sans-serif;font-size:1.05rem;font-weight:600;color:#fff;margin-bottom:.5rem}
+p{color:rgba(226,232,240,.68);line-height:1.8;margin-bottom:.9rem}
+p:last-child{margin-bottom:0}
+
+/* CARDS */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:2.5rem;margin-top:2.5rem}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;margin-top:2.5rem}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-top:2.5rem}
+.card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.6rem;transition:all .35s cubic-bezier(.4,0,.2,1);position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at var(--mx,50%) var(--my,50%),rgba(37,99,235,.08) 0%,transparent 60%);opacity:0;transition:opacity .3s}
+.card:hover::before{opacity:1}
+.card:hover{border-color:rgba(37,99,235,.45);transform:translateY(-6px) scale(1.01);box-shadow:0 16px 40px rgba(0,0,0,.5),0 0 0 1px rgba(37,99,235,.1)}
+.card-icon{font-size:1.8rem;margin-bottom:.9rem}
+.data-n{font-family:'Syne',sans-serif;font-size:2.1rem;font-weight:800;color:var(--accent);line-height:1}
+.data-d{font-size:.8rem;color:var(--muted);margin-top:.4rem;line-height:1.5}
+.data-s{font-size:.68rem;color:rgba(100,116,139,.55);margin-top:.6rem;font-style:italic}
+
+/* OBJECTIVES */
+.obj-main{background:var(--bg3);border:1px solid rgba(6,182,212,.2);border-radius:10px;padding:1.8rem;border-left:3px solid var(--accent)}
+.obj-label{font-size:.68rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:.7rem}
+.obj-list{list-style:none;margin-top:.5rem}
+.obj-list li{display:flex;align-items:flex-start;gap:.7rem;padding:.65rem 0;border-bottom:1px solid var(--border);font-size:.88rem;color:rgba(226,232,240,.75);transition:color .2s}
+.obj-list li:last-child{border:none}
+.obj-list li:hover{color:#fff}
+.obj-list li::before{content:'›';color:var(--blue2);font-weight:700;flex-shrink:0;font-size:1.1rem;line-height:1.4}
+
+/* STEPS */
+.steps{margin-top:2.5rem;position:relative}
+.steps::before{content:'';position:absolute;left:21px;top:8px;bottom:0;width:1px;background:linear-gradient(to bottom,var(--blue),transparent)}
+.step{display:flex;gap:1.8rem;padding-bottom:2.2rem;position:relative}
+.snum{width:44px;height:44px;border-radius:50%;background:var(--bg3);border:2px solid var(--blue);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:700;font-size:.78rem;color:var(--blue2);flex-shrink:0;z-index:1;transition:all .3s}
+.step:hover .snum{background:var(--blue);color:#fff;box-shadow:0 0 16px rgba(37,99,235,.4);transform:scale(1.1)}
+.scont{padding-top:.4rem}
+.scont .t{font-family:'Syne',sans-serif;font-weight:600;font-size:.95rem;color:#fff;margin-bottom:.3rem}
+.scont .d{font-size:.86rem;color:var(--muted);line-height:1.65}
+
+/* TABLE */
+.ttable{width:100%;border-collapse:collapse;margin-top:2rem;font-size:.85rem}
+.ttable th{text-align:left;padding:.75rem 1rem;background:var(--bg3);color:var(--accent);font-weight:600;font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;border-bottom:1px solid var(--border)}
+.ttable td{padding:.7rem 1rem;border-bottom:1px solid var(--border);color:rgba(226,232,240,.72);vertical-align:top;transition:background .2s}
+.ttable tr:last-child td{border:none}
+.ttable tr:hover td{background:rgba(37,99,235,.06)}
+.hl{color:#fff;font-weight:500}
+
+/* RESULTS */
+.res-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.8rem;transition:all .35s}
+.res-card:hover{border-color:rgba(6,182,212,.35);transform:translateY(-5px);box-shadow:0 12px 36px rgba(0,0,0,.5)}
+.res-n{font-family:'Syne',sans-serif;font-size:2.8rem;font-weight:800;color:rgba(6,182,212,.1);line-height:1;margin-bottom:.7rem}
+.res-t{font-size:.9rem;line-height:1.7;color:rgba(226,232,240,.75)}
+
+/* VIDEO */
+.vid-wrap{margin-top:2.5rem;border-radius:12px;overflow:hidden;border:1px solid var(--border);background:var(--card)}
+.vid-wrap video{width:100%;display:block;max-height:500px;object-fit:contain;background:#000}
+.vid-cap{padding:1rem 1.4rem;font-size:.82rem;color:var(--muted)}
+.vid-cap strong{color:var(--text)}
+
+/* GALLERY */
+.gal-tabs{display:flex;gap:.4rem;margin-bottom:1.8rem;flex-wrap:wrap}
+.gtab{background:none;border:1px solid var(--border);color:var(--muted);padding:.35rem .9rem;border-radius:100px;font-size:.74rem;cursor:pointer;transition:all .2s;font-family:'Inter',sans-serif}
+.gtab:hover,.gtab.on{background:var(--blue);color:#fff;border-color:var(--blue)}
+.gal-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem}
+.gal-item{border-radius:10px;overflow:hidden;background:var(--card);border:1px solid var(--border);cursor:pointer;transition:all .35s}
+.gal-item:hover{border-color:var(--blue2);transform:translateY(-5px);box-shadow:0 16px 36px rgba(0,0,0,.55)}
+.gal-item img{width:100%;height:210px;object-fit:cover;display:block;transition:transform .4s}
+.gal-item:hover img{transform:scale(1.06)}
+.gal-info{padding:.9rem 1rem}
+.gal-t{font-family:'Syne',sans-serif;font-weight:600;font-size:.86rem;color:#fff}
+.gal-d{font-size:.75rem;color:var(--muted);margin-top:.25rem;line-height:1.5}
+.gal-badge{display:inline-block;font-size:.62rem;letter-spacing:.07em;text-transform:uppercase;background:rgba(37,99,235,.1);color:var(--blue3);border:1px solid rgba(37,99,235,.2);padding:.15rem .55rem;border-radius:100px;margin-top:.45rem}
+
+/* LIGHTBOX */
+.lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.94);z-index:9000;align-items:center;justify-content:center;padding:2rem}
+.lb.open{display:flex}
+.lb-box{max-width:860px;width:100%;position:relative}
+.lb-box img{width:100%;border-radius:10px;max-height:82vh;object-fit:contain}
+.lb-x{position:absolute;top:-2.4rem;right:0;background:none;border:none;color:#fff;font-size:1.3rem;cursor:pointer;opacity:.7;transition:opacity .2s}
+.lb-x:hover{opacity:1}
+.lb-cap{text-align:center;margin-top:.9rem;color:rgba(255,255,255,.6);font-size:.84rem}
+
+/* REFERENCES */
+.ref-tabs{display:flex;gap:.4rem;margin:1.8rem 0 1.2rem;flex-wrap:wrap}
+.rtab{background:none;border:1px solid var(--border);color:var(--muted);padding:.35rem .9rem;border-radius:100px;font-size:.74rem;cursor:pointer;transition:all .2s;font-family:'Inter',sans-serif}
+.rtab.on{background:var(--blue);color:#fff;border-color:var(--blue)}
+.rsec{display:none}
+.rsec.on{display:block}
+.ref-list{list-style:none}
+.ref-list li{display:flex;gap:1rem;padding:1rem 0;border-bottom:1px solid var(--border);align-items:flex-start}
+.ref-list li:last-child{border:none}
+.rn{width:24px;height:24px;border-radius:5px;background:rgba(37,99,235,.1);border:1px solid rgba(37,99,235,.2);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:.7rem;font-weight:600;color:var(--blue3);flex-shrink:0}
+.rt{font-size:.84rem;line-height:1.65;color:rgba(226,232,240,.68)}
+.rt strong{color:var(--text);font-weight:500}
+.rlink{color:var(--accent);text-decoration:none;font-size:.76rem;display:inline-flex;align-items:center;gap:.2rem;margin-top:.2rem;transition:color .2s}
+.rlink:hover{color:var(--accent2)}
+.verified{display:inline-flex;align-items:center;gap:.4rem;background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.18);color:var(--green);font-size:.73rem;padding:.3rem .8rem;border-radius:6px;margin-bottom:1.4rem}
+
+/* RESOURCES */
+.rec-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem;margin-top:2rem}
+.rec{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.4rem;transition:all .35s;text-decoration:none;display:block;color:inherit}
+.rec:hover{border-color:rgba(6,182,212,.35);transform:translateY(-4px);box-shadow:0 12px 28px rgba(0,0,0,.4)}
+.rec-icon{font-size:1.7rem;margin-bottom:.7rem}
+.rec-t{font-family:'Syne',sans-serif;font-weight:600;font-size:.88rem;color:#fff;margin-bottom:.25rem}
+.rec-d{font-size:.78rem;color:var(--muted);line-height:1.5}
+
+/* CONTACT */
+.team-list{display:flex;flex-direction:column;gap:.9rem}
+.tm{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.1rem;display:flex;align-items:center;gap:1.1rem;transition:all .35s}
+.tm:hover{border-color:rgba(37,99,235,.35);transform:translateX(4px)}
+.tm-av{width:54px;height:54px;border-radius:50%;overflow:hidden;flex-shrink:0;border:2px solid var(--border)}
+.tm-av img{width:100%;height:100%;object-fit:cover}
+.tm-init{width:54px;height:54px;border-radius:50%;background:linear-gradient(135deg,var(--bg3),var(--bg4));display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:700;color:var(--blue3);font-size:1rem;flex-shrink:0;border:2px solid var(--border)}
+.tm-name{font-family:'Syne',sans-serif;font-weight:600;font-size:.86rem;color:#fff}
+.tm-email{font-size:.73rem;color:var(--muted);margin-top:.1rem}
+.tm-role{font-size:.7rem;color:var(--accent);margin-top:.15rem}
+.doc-card{background:var(--card);border:1px solid rgba(6,182,212,.18);border-radius:10px;padding:1.1rem;display:flex;align-items:center;gap:1.1rem;margin-top:.9rem}
+.doc-av{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--accent));display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:700;color:#fff;font-size:.95rem;flex-shrink:0}
+.cf .fg{margin-bottom:1rem}
+.cf label{display:block;font-size:.72rem;font-weight:500;color:var(--muted);margin-bottom:.35rem;letter-spacing:.06em;text-transform:uppercase}
+.cf input,.cf textarea{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:7px;padding:.75rem .9rem;color:var(--text);font-family:'Inter',sans-serif;font-size:.88rem;outline:none;resize:vertical;transition:border .2s}
+.cf input:focus,.cf textarea:focus{border-color:var(--blue2);box-shadow:0 0 0 3px rgba(37,99,235,.1)}
+.cf textarea{min-height:110px}
+.loc{display:inline-flex;align-items:center;gap:.5rem;background:rgba(37,99,235,.07);border:1px solid rgba(37,99,235,.15);border-radius:7px;padding:.55rem .9rem;font-size:.78rem;color:rgba(226,232,240,.65);margin-top:1.2rem}
+
+/* FOOTER */
+footer{background:var(--bg);border-top:1px solid var(--border);padding:2.5rem 2rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1.2rem}
+.fl{display:flex;align-items:center;gap:1.2rem}
+.fl img{height:30px;object-fit:contain}
+.fl .ufps-footer{height:36px;filter:brightness(0) invert(1);opacity:.55;transition:opacity .2s}
+.fl .ufps-footer:hover{opacity:.9}
+.fm{text-align:center;font-size:.76rem;color:var(--muted)}
+.fr{text-align:right;font-size:.76rem;color:var(--muted)}
+
+/* STRIPE */
+.stripe{height:2px;background:linear-gradient(90deg,var(--blue),var(--accent),var(--neon),var(--blue));background-size:200% 100%;animation:stripe 3s linear infinite}
+@keyframes stripe{0%{background-position:0%}100%{background-position:200%}}
+
+/* ========================================
+   SIMULADOR PIEZOELÉCTRICO ECOPASO
+   ======================================== */
+#simulador{
+  padding:5.5rem 2rem;
+  max-width:1400px;
+  margin-inline:auto;
+  position:relative;
+}
+.sim-header{text-align:center;margin-bottom:3rem}
+.sim-header .stag{justify-content:center}
+.sim-header .stag::before{display:none}
+.sim-header .stag::after{content:'';width:18px;height:1px;background:var(--accent)}
+.sim-header h2{margin-bottom:.6rem}
+.sim-header p{color:rgba(226,232,240,.55);font-size:.92rem;max-width:580px;margin-inline:auto}
+
+/* simulator layout */
+.sim-layout{display:grid;grid-template-columns:220px 1fr 220px;gap:2rem;align-items:center}
+
+/* Stats panel */
+.sim-stats-panel{display:flex;flex-direction:column;gap:1rem}
+.sim-stat-card{background:rgba(14,20,38,.9);border:1px solid rgba(37,99,235,.2);border-radius:12px;padding:1.2rem;position:relative;overflow:hidden;transition:all .3s}
+.sim-stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--blue),var(--accent))}
+.sim-stat-label{font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:.4rem}
+.sim-stat-value{font-family:'Share Tech Mono',monospace;font-size:1.8rem;color:var(--accent2);line-height:1;transition:all .2s}
+.sim-stat-unit{font-family:'Share Tech Mono',monospace;font-size:.75rem;color:var(--muted);margin-top:.2rem}
+.sim-stat-bar{height:3px;background:rgba(37,99,235,.15);border-radius:2px;margin-top:.8rem;overflow:hidden}
+.sim-stat-fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--accent));border-radius:2px;width:0%;transition:width .4s ease}
+
+/* Tile area */
+.sim-tile-area{display:flex;flex-direction:column;align-items:center;gap:1.5rem}
+.sim-tile-wrap{position:relative;width:300px;height:300px;cursor:pointer;user-select:none;-webkit-user-select:none}
+.sim-tile-wrap:active{transform:scale(.98)}
+
+/* SVG tile */
+.sim-svg{width:100%;height:100%;filter:drop-shadow(0 0 20px rgba(37,99,235,.4))}
+.sim-hex-outer{fill:rgba(37,99,235,.08);stroke:rgba(37,99,235,.5);stroke-width:1.5;transition:all .15s}
+.sim-hex-mid{fill:rgba(6,182,212,.04);stroke:rgba(6,182,212,.25);stroke-width:1}
+.sim-hex-inner{fill:rgba(37,99,235,.06);stroke:rgba(37,99,235,.2);stroke-width:1}
+.sim-hex-glass{fill:rgba(255,255,255,.03);stroke:rgba(255,255,255,.08);stroke-width:.5}
+.sim-sensor{fill:rgba(30,40,70,.9);stroke:rgba(6,182,212,.6);stroke-width:1.5;transition:all .15s}
+.sim-sensor-inner{fill:rgba(6,182,212,.2)}
+.sim-sensor-dot{fill:var(--accent2);transition:all .2s}
+.sim-wire{stroke:rgba(37,99,235,.4);stroke-width:1;fill:none;stroke-dasharray:4 3;animation:wireDash 2s linear infinite}
+@keyframes wireDash{to{stroke-dashoffset:-14}}
+.sim-pulse{opacity:0;fill:rgba(6,182,212,.6);r:4}
+.tile-pressed .sim-hex-outer{fill:rgba(37,99,235,.18);stroke:var(--accent2);stroke-width:2;filter:url(#glow)}
+.tile-pressed .sim-sensor{fill:rgba(30,70,100,.95);stroke:var(--accent);stroke-width:2;filter:url(#glowSensor)}
+.tile-pressed .sim-sensor-inner{fill:rgba(6,182,212,.5)}
+
+/* circuit panel */
+.sim-circuit-panel{display:flex;flex-direction:column;gap:1rem}
+.circuit-title{font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:.2rem;text-align:center}
+.circuit-svg-wrap{background:rgba(14,20,38,.9);border:1px solid rgba(37,99,235,.2);border-radius:12px;padding:1.2rem;position:relative;overflow:hidden}
+.circuit-svg-wrap::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--green),var(--accent))}
+.circuit-svg{width:100%;height:auto}
+
+/* LED indicator */
+.led-wrap{background:rgba(14,20,38,.9);border:1px solid rgba(37,99,235,.2);border-radius:12px;padding:1rem;text-align:center;transition:all .4s}
+.led-label{font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.6rem}
+.led-bulb{width:32px;height:32px;border-radius:50%;background:rgba(120,0,0,.4);border:2px solid rgba(200,0,0,.3);margin:0 auto;transition:all .3s}
+.led-bulb.on{background:var(--red);border-color:var(--red2);box-shadow:0 0 8px var(--red),0 0 20px rgba(239,68,68,.6),0 0 40px rgba(239,68,68,.3)}
+.led-status{font-size:.68rem;color:var(--muted);margin-top:.4rem;transition:color .3s}
+.led-bulb.on + .led-status{color:var(--red2)}
+
+/* Hint */
+.sim-hint{font-size:.78rem;color:rgba(226,232,240,.35);text-align:center;letter-spacing:.06em;animation:hintPulse 2.5s ease-in-out infinite}
+@keyframes hintPulse{0%,100%{opacity:.5}50%{opacity:1}}
+
+/* Capacitor fill */
+.cap-fill{transition:height .4s ease, fill .4s}
+
+/* Particle canvas */
+#simParticles{position:absolute;inset:0;pointer-events:none;border-radius:12px}
+
+/* Mobile sim layout */
+@media(max-width:900px){
+  .sim-layout{grid-template-columns:1fr;grid-template-rows:auto auto auto}
+  .sim-tile-wrap{width:240px;height:240px}
+  .sim-stats-panel{flex-direction:row;flex-wrap:wrap}
+  .sim-stat-card{flex:1;min-width:140px}
+}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  nav{padding:.8rem 1.2rem}
+  .sec{padding:4rem 1.2rem}
+  .sfull .inn{padding:0 1.2rem}
+  .grid2,.grid3,.grid4{grid-template-columns:1fr}
+  .stats{flex-wrap:wrap}
+  .stat{min-width:50%;border-right:none;border-bottom:1px solid var(--border)}
+  footer{flex-direction:column;text-align:center;padding:1.8rem 1.2rem}
+  .fr{text-align:center}
+  .fl{justify-content:center}
+  #expo-banner{flex-wrap:wrap;gap:.6rem;justify-content:center;padding:.6rem 1rem}
+}
+@media(max-width:520px){
+  .gal-grid{grid-template-columns:1fr}
+  .hero-h1{font-size:3rem}
+  .sim-stats-panel{flex-direction:column}
+  .sim-tile-wrap{width:200px;height:200px}
+}
+
+/* WAVE RING animation */
+@keyframes waveRing{
+  0%{r:0;opacity:.8}
+  100%{r:80;opacity:0}
+}
+.wave-ring{animation:waveRing .8s ease-out forwards}
+
+/* NUMBER counter */
+.count-up{display:inline}
+</style>
+</head>
+<body>
+
+<div id="prog"></div>
+<div class="cursor-glow" id="cursorGlow"></div>
+
+<!-- NAV (hamburger always visible) -->
+<nav>
+  <div class="nav-brand">
+    <img src="img/logo.png" alt="ECOPASO">
+    <span>ECOPASO</span>
+  </div>
+  <button class="ham" id="hamBtn" aria-label="Menú">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- MOBILE (& ALL) MENU -->
+<div class="mob" id="mob">
+  <a href="#inicio">🏠 Inicio</a>
+  <a href="#sobre">📋 Proyecto</a>
+  <a href="#objetivos">🎯 Objetivos</a>
+  <a href="#metodologia">🔬 Metodología</a>
+  <a href="#desarrollo">⚙️ Desarrollo</a>
+  <a href="#resultados">📊 Resultados</a>
+  <a href="#simulador">⚡ Simulador</a>
+  <a href="#galeria">🖼️ Galería</a>
+  <a href="#referencias">📚 Referencias</a>
+  <a href="#contacto">✉️ Contacto</a>
+</div>
+
+<!-- EXPO INDUSTRIA BANNER -->
+<div id="expo-banner">
+  <div class="banner-expo">
+    <img src="img/expo-logo.png" alt="ExpoIndustria 4.0">
+    <div>
+      <div class="banner-text"><strong>Feria ExpoIndustria 4.0</strong></div>
+      <div class="banner-text" style="font-size:.64rem;opacity:.7">Universidad Francisco de Paula Santander · 2026</div>
+    </div>
+  </div>
+  <div class="banner-line"></div>
+  <div class="banner-text" style="text-align:center;font-size:.7rem">Proyecto presentado en la <strong>Feria de Ingeniería Industrial</strong><br><span style="color:rgba(147,197,253,.5);font-size:.65rem">Procesos Industriales I · UFPS Cúcuta</span></div>
+  <div class="banner-line"></div>
+  <div class="banner-ufps">
+    <img src="img/ufps-logo.png" alt="UFPS">
+  </div>
+</div>
+
+<div class="stripe"></div>
+
+<!-- HERO -->
+<section id="inicio">
+  <div class="hero-bg"></div>
+  <div class="hero-grid-bg"></div>
+  <canvas id="hero-canvas"></canvas>
+  <div class="hero-inner">
+    <div class="badge fi"><span class="badge-dot"></span>Feria ExpoIndustria 4.0 · UFPS 2026</div>
+    <div class="hero-logo fi" data-delay="1"><img src="img/logo2.png" alt="ECOPASO logo"></div>
+    <h1 class="hero-h1 fi" data-delay="2"><span class="b">ECO</span><span class="a">PASO</span></h1>
+    <p class="hero-sub fi" data-delay="2">Baldosa Ecológica con Propiedades Piezoeléctricas</p>
+    <p class="hero-tag fi" data-delay="3">"Cada paso, una chispa"</p>
+    <p class="hero-p fi" data-delay="3">Un prototipo de ingeniería que convierte la presión mecánica del tránsito peatonal en energía eléctrica — sin baterías, sin partes móviles, sin combustibles.</p>
+    <div class="cta fi" data-delay="4">
+      <a href="#sobre" class="btn-main">▶ Explorar proyecto</a>
+      <a href="#galeria" class="btn-out">Ver galería →</a>
+    </div>
+    <div class="stats fi" data-delay="4">
+      <div class="stat"><div class="stat-n">7<em>×</em></div><div class="stat-l">Sensores PZT</div></div>
+      <div class="stat"><div class="stat-n"><em>⬡</em></div><div class="stat-l">Hexagonal</div></div>
+      <div class="stat"><div class="stat-n">65<em>%</em></div><div class="stat-l">Resina epoxi</div></div>
+      <div class="stat"><div class="stat-n">1 <em>LED</em></div><div class="stat-l">Validado</div></div>
+      <div class="stat"><div class="stat-n"><em>0</em></div><div class="stat-l">Baterías</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- SOBRE -->
+<div id="sobre" class="sfull" style="background:var(--bg2)">
+<div class="inn">
+  <div class="stag fi">Contexto e introducción</div>
+  <h2 class="fi">Sobre el Proyecto</h2>
+  <div class="grid2">
+    <div class="fi">
+      <p>ECOPASO es un prototipo de baldosa ecológica piezoeléctrica desarrollado por estudiantes de Procesos Industriales I de la Universidad Francisco de Paula Santander (UFPS), Cúcuta. Nació como respuesta a un problema global: la dependencia energética de fuentes no renovables y el desperdicio de energía mecánica en espacios urbanos.</p>
+      <p>El sistema integra sensores cerámicos PZT en una estructura multicapa de resina epoxi con geometría hexagonal. Cada pisada deforma los sensores, generando una señal eléctrica que se rectifica y almacena en capacitores, capaz de activar un LED sin baterías ni mecanismos móviles.</p>
+      <p>La geometría hexagonal es una decisión de ingeniería: la teselación hexagonal permite cubrir cualquier superficie plana sin espacios intermedios con el perímetro mínimo por área, maximizando la captación de energía por metro cuadrado.</p>
+      <p><strong style="color:#fff">Público objetivo:</strong> Arquitectos, ingenieros urbanos, investigadores en energías renovables e instituciones con alto flujo peatonal.</p>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.9rem" class="fi">
+      <div class="card"><div class="data-n">80%</div><div class="data-d">de la energía mundial proviene de combustibles fósiles</div><div class="data-s">IEA, 2023</div></div>
+      <div class="card"><div class="data-n">675M</div><div class="data-d">personas sin acceso confiable a electricidad</div><div class="data-s">ONU/BM, 2023</div></div>
+      <div class="card"><div class="data-n">~5μJ</div><div class="data-d">energía típica por pisada en sistemas PZT unimorph</div><div class="data-s">Granstrom et al., 2007</div></div>
+      <div class="card"><div class="data-n">PZT</div><div class="data-d">mayor constante piezoeléctrica en cerámicas comerciales</div><div class="data-s">Jaffe et al., 1971</div></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- OBJETIVOS -->
+<section id="objetivos" class="sec">
+  <div class="stag fi">Propósito del proyecto</div>
+  <h2 class="fi">Objetivos</h2>
+  <div class="grid2">
+    <div class="fi">
+      <div class="obj-main">
+        <div class="obj-label">Objetivo General</div>
+        <h3 style="font-size:1rem;line-height:1.5">Diseñar y construir una baldosa ecológica hexagonal de estructura multicapa con propiedades piezoeléctricas, capaz de capturar la energía mecánica del tránsito peatonal y convertirla en energía eléctrica funcional.</h3>
+      </div>
+    </div>
+    <div class="fi">
+      <div class="obj-label" style="font-size:.68rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:.5rem">Objetivos Específicos</div>
+      <ul class="obj-list">
+        <li>Seleccionar sensores PZT unimorph para captación de energía por deformación de pisada.</li>
+        <li>Diseñar el circuito piezoeléctrico en configuración paralela con 7 sensores.</li>
+        <li>Evaluar materiales de relleno compatibles con la resina epoxi.</li>
+        <li>Desarrollar la estructura multicapa de encapsulado protector.</li>
+        <li>Determinar la proporción óptima resina/catalizador (65/35).</li>
+        <li>Validar funcionalmente el prototipo mediante activación del LED.</li>
+        <li>Justificar la geometría hexagonal como criterio de eficiencia en superficie.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- METODOLOGIA -->
+<div id="metodologia" class="sfull" style="background:var(--bg2)">
+<div class="inn">
+  <div class="stag fi">Proceso de desarrollo</div>
+  <h2 class="fi">Metodología</h2>
+  <p class="fi" style="max-width:660px">Investigación aplicada de tipo experimental. Ciclo de diseño → prototipado → evaluación → iteración hasta la validación funcional.</p>
+  <div class="steps fi">
+    <div class="step"><div class="snum">01</div><div class="scont"><div class="t">Diseño hexagonal — eficiencia de cobertura</div><div class="d">La geometría hexagonal se seleccionó basándose en el Teorema del Panal (Hales, 2001): la teselación hexagonal regular cubre una superficie plana sin intersticios con el menor perímetro posible por unidad de área, maximizando la densidad de sensores por m².</div></div></div>
+    <div class="step"><div class="snum">02</div><div class="scont"><div class="t">Selección de sensores PZT unimorph</div><div class="d">Se eligieron discos unimorph PZT de 20 mm (P-81) por su relación óptima entre tamaño, sensibilidad y costo. La estructura unimorph favorece la deflexión máxima bajo carga distribuida como la producida por una pisada.</div></div></div>
+    <div class="step"><div class="snum">03</div><div class="scont"><div class="t">Circuito piezoeléctrico en paralelo</div><div class="d">7 módulos PZT en configuración paralela suman las corrientes individuales, incrementando la carga acumulada en los capacitores. Un diodo de rectificación convierte la señal alterna piezoeléctrica en corriente continua.</div></div></div>
+    <div class="step"><div class="snum">04</div><div class="scont"><div class="t">Evaluación de materiales de relleno</div><div class="d">Se evaluaron: (a) PET picado — descartado por flotación durante el curado; (b) Aserrín — descartado por absorción excesiva de resina; (c) Caucho triturado — seleccionado por compatibilidad de densidad, flexibilidad y amortiguación.</div></div></div>
+    <div class="step"><div class="snum">05</div><div class="scont"><div class="t">Formulación del encapsulado (65% resina / 35% catalizador)</div><div class="d">La proporción 65/35 reduce la rigidez del material final respecto a la mezcla estándar, permitiendo que los sensores se deformen bajo carga. La flexibilidad del encapsulado es condición necesaria para generar voltaje.</div></div></div>
+    <div class="step"><div class="snum">06</div><div class="scont"><div class="t">Ensamble en estructura multicapa</div><div class="d">El circuito no se sumerge en la resina. Arquitectura estratificada: capa base de resina → circuito piezoeléctrico → capa superior protectora. Aísla los componentes de la reacción exotérmica del curado (60–80°C).</div></div></div>
+    <div class="step"><div class="snum">07</div><div class="scont"><div class="t">Validación funcional por pisada</div><div class="d">El prototipo fue sometido a pruebas de carga peatonal. La activación del LED confirmó que el sistema genera, rectifica y acumula suficiente carga eléctrica a partir de las pisadas.</div></div></div>
+  </div>
+</div>
+</div>
+
+<!-- DESARROLLO -->
+<section id="desarrollo" class="sec">
+  <div class="stag fi">Contenido técnico</div>
+  <h2 class="fi">Desarrollo del Proyecto</h2>
+  <div class="grid2">
+    <div class="card fi"><div class="card-icon">⚡</div><h3>El Efecto Piezoeléctrico</h3><p>Descubierto por los hermanos Curie en 1880: ciertos materiales generan carga eléctrica al deformarse mecánicamente. En ECOPASO, la presión de una pisada deforma los discos PZT, desplazando las cargas dentro de la celda cristalina y generando una diferencia de potencial eléctrico.</p></div>
+    <div class="card fi"><div class="card-icon">🔬</div><h3>Materiales PZT — Pb(Zr,Ti)O₃</h3><p>El titanato zirconato de plomo es la cerámica piezoeléctrica más usada por su constante piezoeléctrica excepcional (d₃₃ entre 200–700 pC/N). Su estructura tipo perovskita ABO₃ permite alta sensibilidad a la deformación mecánica, ideal para entornos de baja frecuencia como el tránsito peatonal.</p></div>
+    <div class="card fi"><div class="card-icon">⬡</div><h3>Geometría Hexagonal</h3><p>El Teorema del Panal (Hales, 2001) demuestra que la teselación hexagonal minimiza el perímetro total por unidad de área. Una instalación hexagonal en pavimento cubre la misma superficie con más densidad de sensores activos por m² que baldosas cuadradas o triangulares.</p></div>
+    <div class="card fi"><div class="card-icon">▤</div><h3>Estructura Multicapa</h3><p>La resina epoxi libera calor (60–80°C) durante el curado. El contacto directo con el circuito puede dañar soldaduras y sensores. La estructura multicapa crea una barrera térmica protectora, preservando la integridad del sistema electrónico.</p></div>
+  </div>
+  <div class="fi">
+    <h3 style="margin-top:2.5rem;margin-bottom:.5rem">Especificaciones Técnicas</h3>
+    <table class="ttable">
+      <tr><th>Parámetro</th><th>Especificación</th><th>Justificación</th></tr>
+      <tr><td class="hl">Tipo de sensor</td><td>Unimorph PZT 20 mm (P-81)</td><td>Mayor deflexión bajo carga de baja frecuencia</td></tr>
+      <tr><td class="hl">Cantidad</td><td>7 unidades</td><td>Configuración óptima determinada experimentalmente</td></tr>
+      <tr><td class="hl">Configuración</td><td>Paralelo</td><td>Maximiza corriente acumulada</td></tr>
+      <tr><td class="hl">Encapsulado</td><td>65% resina / 35% catalizador</td><td>Mantiene flexibilidad para deformación</td></tr>
+      <tr><td class="hl">Relleno</td><td>Caucho triturado</td><td>Compatibilidad y flexibilidad estructural</td></tr>
+      <tr><td class="hl">Geometría</td><td>Hexagonal regular</td><td>Eficiencia máxima de cobertura (Hales, 2001)</td></tr>
+      <tr><td class="hl">Ensamble</td><td>Estructura multicapa</td><td>Aislamiento térmico durante el curado</td></tr>
+      <tr><td class="hl">Almacenamiento</td><td>Capacitores cerámicos</td><td>Acumulan carga de múltiples pisadas</td></tr>
+      <tr><td class="hl">Rectificación</td><td>Diodo de rectificación</td><td>Convierte CA piezoeléctrica en CC</td></tr>
+      <tr><td class="hl">Carga de prueba</td><td>LED indicador rojo</td><td>Validación funcional a escala de laboratorio</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- RESULTADOS -->
+<div id="resultados" class="sfull" style="background:var(--bg2)">
+<div class="inn">
+  <div class="stag fi">Logros alcanzados</div>
+  <h2 class="fi">Resultados</h2>
+  <div class="grid3">
+    <div class="res-card fi"><div class="res-n">01</div><div class="res-t">La geometría hexagonal optimiza el recubrimiento de superficies peatonales, maximizando la captación de energía mecánica por metro cuadrado sin generar espacios de desperdicio.</div></div>
+    <div class="res-card fi"><div class="res-n">02</div><div class="res-t">La configuración de 7 sensores unimorph PZT en paralelo demostró ser óptima para la transducción de energía mecánica en eléctrica, acumulando carga suficiente para activar el LED.</div></div>
+    <div class="res-card fi"><div class="res-n">03</div><div class="res-t">La estructura multicapa protege la integridad del circuito frente a la reacción exotérmica de la resina, garantizando la durabilidad y funcionalidad del prototipo.</div></div>
+    <div class="res-card fi"><div class="res-n">04</div><div class="res-t">El caucho triturado como relleno logró una distribución homogénea dentro de la resina, con densidad compatible y flexibilidad adecuada para transmitir las deformaciones a los sensores.</div></div>
+    <div class="res-card fi"><div class="res-n">05</div><div class="res-t">La proporción 65/35 resina/catalizador reduce la rigidez del encapsulado respecto al estándar, condición crítica para permitir la deformación bajo carga peatonal normal.</div></div>
+    <div class="res-card fi"><div class="res-n">06</div><div class="res-t">Validación funcional exitosa: el prototipo activó un LED indicador mediante presión manual, confirmando la generación, rectificación y almacenamiento de energía eléctrica sin baterías.</div></div>
+  </div>
+  <div class="vid-wrap fi">
+    <video controls preload="metadata">
+      <source src="img/prueba.mp4" type="video/mp4">
+      Tu navegador no soporta video HTML5.
+    </video>
+    <div class="vid-cap"><strong>Video de prueba:</strong> Sistema piezoeléctrico activando un LED mediante presión manual — validación del principio de funcionamiento.</div>
+  </div>
+</div>
+</div>
+
+<!-- =============================================
+     SIMULADOR PIEZOELÉCTRICO ECOPASO
+     ============================================= -->
+<section id="simulador" style="background:var(--bg);padding:5.5rem 2rem;position:relative;overflow:hidden">
+  <!-- bg glow -->
+  <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(37,99,235,.06) 0%,transparent 70%);pointer-events:none"></div>
+  <div style="max-width:1300px;margin-inline:auto">
+    <div class="sim-header fi">
+      <div class="stag" style="justify-content:center">
+        <span style="width:18px;height:1px;background:var(--accent);display:block"></span>
+        Demostración interactiva
+        <span style="width:18px;height:1px;background:var(--accent);display:block"></span>
+      </div>
+      <h2>Simulador Piezoeléctrico Ecopaso</h2>
+      <p>Presiona o mantén pulsada la baldosa hexagonal para simular la generación de energía eléctrica a partir de la presión peatonal</p>
+    </div>
+
+    <div class="sim-layout fi">
+
+      <!-- LEFT: Stats -->
+      <div class="sim-stats-panel">
+        <div class="sim-stat-card">
+          <div class="sim-stat-label">⚡ Voltaje Generado</div>
+          <div class="sim-stat-value" id="simVoltage">0.00</div>
+          <div class="sim-stat-unit">voltios (V)</div>
+          <div class="sim-stat-bar"><div class="sim-stat-fill" id="voltBar"></div></div>
+        </div>
+        <div class="sim-stat-card">
+          <div class="sim-stat-label">🔋 Energía Acumulada</div>
+          <div class="sim-stat-value" id="simEnergy">0.00</div>
+          <div class="sim-stat-unit">microjulios (μJ)</div>
+          <div class="sim-stat-bar"><div class="sim-stat-fill" id="energyBar" style="background:linear-gradient(90deg,var(--green),var(--neon))"></div></div>
+        </div>
+        <div class="sim-stat-card">
+          <div class="sim-stat-label">👣 Presiones Detectadas</div>
+          <div class="sim-stat-value" id="simPresses">0</div>
+          <div class="sim-stat-unit">pisadas registradas</div>
+          <div class="sim-stat-bar"><div class="sim-stat-fill" id="pressBar" style="background:linear-gradient(90deg,var(--accent),var(--blue2))"></div></div>
+        </div>
+        <div class="sim-stat-card" style="border-color:rgba(6,182,212,.25)">
+          <div class="sim-stat-label" style="color:rgba(226,232,240,.4);font-size:.58rem">ℹ️ Sobre el Simulador</div>
+          <div style="font-size:.7rem;color:rgba(226,232,240,.4);line-height:1.6;margin-top:.4rem">Los valores son simulados con variación aleatoria para demostrar el principio de operación del sistema piezoeléctrico ECOPASO.</div>
+        </div>
+      </div>
+
+      <!-- CENTER: Hex Tile -->
+      <div class="sim-tile-area">
+        <div class="sim-tile-wrap" id="simTile"
+             onmousedown="tilePress(true)" onmouseup="tilePress(false)" onmouseleave="tilePress(false)"
+             ontouchstart="tilePress(true)" ontouchend="tilePress(false)">
+          <canvas id="simParticles" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;border-radius:8px"></canvas>
+          <svg class="sim-svg" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <filter id="glow"><feGaussianBlur stdDeviation="4" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+              <filter id="glowSensor"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+              <filter id="glowLED"><feGaussianBlur stdDeviation="5" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+              <linearGradient id="hexGrad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="rgba(37,99,235,0.15)"/>
+                <stop offset="100%" stop-color="rgba(6,182,212,0.08)"/>
+              </linearGradient>
+              <linearGradient id="wireGrad" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stop-color="rgba(6,182,212,0.3)"/>
+                <stop offset="100%" stop-color="rgba(37,99,235,0.6)"/>
+              </linearGradient>
+            </defs>
+
+            <!-- Outer hex glow ring -->
+            <polygon id="hexRing" points="150,16 266,83 266,217 150,284 34,217 34,83" fill="none" stroke="rgba(37,99,235,0.15)" stroke-width="2"/>
+
+            <!-- Main hexagonal tile -->
+            <polygon id="hexMain" class="sim-hex-outer" points="150,22 260,86 260,214 150,278 40,214 40,86" filter="url(#glow)"/>
+            <polygon class="sim-hex-mid" points="150,40 242,93 242,207 150,260 58,207 58,93"/>
+            <polygon class="sim-hex-inner" points="150,58 224,101 224,199 150,242 76,199 76,101"/>
+
+            <!-- Glass shimmer -->
+            <polygon class="sim-hex-glass" points="150,22 260,86 260,150 150,22" opacity=".4"/>
+
+            <!-- Sensor bus lines converging to center -->
+            <line class="sim-wire" x1="150" y1="100" x2="150" y2="155" stroke="url(#wireGrad)"/>
+            <line class="sim-wire" x1="100" y1="130" x2="145" y2="158" stroke="url(#wireGrad)" style="animation-delay:-.5s"/>
+            <line class="sim-wire" x1="200" y1="130" x2="155" y2="158" stroke="url(#wireGrad)" style="animation-delay:-1s"/>
+            <line class="sim-wire" x1="108" y1="178" x2="143" y2="162" stroke="url(#wireGrad)" style="animation-delay:-1.5s"/>
+            <line class="sim-wire" x1="192" y1="178" x2="157" y2="162" stroke="url(#wireGrad)" style="animation-delay:-2s"/>
+            <line class="sim-wire" x1="120" y1="215" x2="147" y2="165" stroke="url(#wireGrad)" style="animation-delay:-2.5s"/>
+            <line class="sim-wire" x1="180" y1="215" x2="153" y2="165" stroke="url(#wireGrad)" style="animation-delay:-3s"/>
+
+            <!-- 7 Piezo sensors (hex arrangement: 1 center + 6 around) -->
+            <!-- Center sensor -->
+            <g class="sensor-g" id="s0">
+              <circle class="sim-sensor" cx="150" cy="100" r="16"/>
+              <circle class="sim-sensor-inner" cx="150" cy="100" r="10"/>
+              <circle class="sim-sensor-dot" cx="150" cy="100" r="4"/>
+              <text x="150" y="103.5" text-anchor="middle" font-family="Share Tech Mono" font-size="5" fill="rgba(147,197,253,.6)">PZT</text>
+            </g>
+            <!-- Surrounding sensors -->
+            <g class="sensor-g" id="s1">
+              <circle class="sim-sensor" cx="100" cy="130" r="14"/>
+              <circle class="sim-sensor-inner" cx="100" cy="130" r="9"/>
+              <circle class="sim-sensor-dot" cx="100" cy="130" r="3.5"/>
+            </g>
+            <g class="sensor-g" id="s2">
+              <circle class="sim-sensor" cx="200" cy="130" r="14"/>
+              <circle class="sim-sensor-inner" cx="200" cy="130" r="9"/>
+              <circle class="sim-sensor-dot" cx="200" cy="130" r="3.5"/>
+            </g>
+            <g class="sensor-g" id="s3">
+              <circle class="sim-sensor" cx="108" cy="178" r="14"/>
+              <circle class="sim-sensor-inner" cx="108" cy="178" r="9"/>
+              <circle class="sim-sensor-dot" cx="108" cy="178" r="3.5"/>
+            </g>
+            <g class="sensor-g" id="s4">
+              <circle class="sim-sensor" cx="192" cy="178" r="14"/>
+              <circle class="sim-sensor-inner" cx="192" cy="178" r="9"/>
+              <circle class="sim-sensor-dot" cx="192" cy="178" r="3.5"/>
+            </g>
+            <g class="sensor-g" id="s5">
+              <circle class="sim-sensor" cx="120" cy="215" r="13"/>
+              <circle class="sim-sensor-inner" cx="120" cy="215" r="8"/>
+              <circle class="sim-sensor-dot" cx="120" cy="215" r="3"/>
+            </g>
+            <g class="sensor-g" id="s6">
+              <circle class="sim-sensor" cx="180" cy="215" r="13"/>
+              <circle class="sim-sensor-inner" cx="180" cy="215" r="8"/>
+              <circle class="sim-sensor-dot" cx="180" cy="215" r="3"/>
+            </g>
+
+            <!-- Sensor labels -->
+            <text x="150" y="88" text-anchor="middle" font-family="Share Tech Mono" font-size="4.5" fill="rgba(6,182,212,.5)">S1</text>
+            <text x="82" y="128" text-anchor="middle" font-family="Share Tech Mono" font-size="4.5" fill="rgba(6,182,212,.5)">S2</text>
+            <text x="218" y="128" text-anchor="middle" font-family="Share Tech Mono" font-size="4.5" fill="rgba(6,182,212,.5)">S3</text>
+            <text x="90" y="176" text-anchor="middle" font-family="Share Tech Mono" font-size="4.5" fill="rgba(6,182,212,.5)">S4</text>
+            <text x="210" y="176" text-anchor="middle" font-family="Share Tech Mono" font-size="4.5" fill="rgba(6,182,212,.5)">S5</text>
+            <text x="104" y="230" text-anchor="middle" font-family="Share Tech Mono" font-size="4.5" fill="rgba(6,182,212,.5)">S6</text>
+            <text x="196" y="230" text-anchor="middle" font-family="Share Tech Mono" font-size="4.5" fill="rgba(6,182,212,.5)">S7</text>
+
+            <!-- Central collection node -->
+            <circle id="nodeCenter" cx="150" cy="160" r="5" fill="rgba(6,182,212,.3)" stroke="rgba(6,182,212,.7)" stroke-width="1"/>
+            <text x="150" y="172" text-anchor="middle" font-family="Share Tech Mono" font-size="4" fill="rgba(6,182,212,.5)">BUS</text>
+
+            <!-- Wave rings (animated on press) -->
+            <circle id="wave1" cx="150" cy="160" r="0" fill="none" stroke="rgba(6,182,212,.6)" stroke-width="1.5" opacity="0"/>
+            <circle id="wave2" cx="150" cy="160" r="0" fill="none" stroke="rgba(37,99,235,.4)" stroke-width="1" opacity="0"/>
+            <circle id="wave3" cx="150" cy="160" r="0" fill="none" stroke="rgba(0,255,180,.3)" stroke-width=".8" opacity="0"/>
+
+            <!-- Corner tech details -->
+            <text x="46" y="50" font-family="Share Tech Mono" font-size="5" fill="rgba(37,99,235,.35)">ECOPASO v1.0</text>
+            <text x="46" y="270" font-family="Share Tech Mono" font-size="4.5" fill="rgba(6,182,212,.3)">7× PZT PARALLEL</text>
+            <text x="200" y="270" font-family="Share Tech Mono" font-size="4.5" fill="rgba(6,182,212,.3)">UFPS 2026</text>
+          </svg>
+        </div>
+        <div class="sim-hint" id="simHint">
+          ⬡ Presiona la baldosa para generar energía
+        </div>
+      </div>
+
+      <!-- RIGHT: Circuit -->
+      <div class="sim-circuit-panel">
+        <div class="circuit-svg-wrap">
+          <div class="circuit-title">Circuito Piezoeléctrico</div>
+          <svg class="circuit-svg" viewBox="0 0 180 280" xmlns="http://www.w3.org/2000/svg">
+            <!-- Wires -->
+            <line x1="90" y1="10" x2="90" y2="40" stroke="rgba(6,182,212,.5)" stroke-width="1.5"/>
+            <line x1="90" y1="70" x2="90" y2="100" stroke="rgba(6,182,212,.5)" stroke-width="1.5"/>
+            <line x1="90" y1="130" x2="90" y2="160" stroke="rgba(6,182,212,.5)" stroke-width="1.5"/>
+            <line x1="90" y1="200" x2="90" y2="240" stroke="rgba(6,182,212,.5)" stroke-width="1.5"/>
+            <line x1="40" y1="10" x2="140" y2="10" stroke="rgba(37,99,235,.4)" stroke-width="1"/>
+            <line x1="40" y1="240" x2="140" y2="240" stroke="rgba(37,99,235,.4)" stroke-width="1"/>
+            <line x1="40" y1="10" x2="40" y2="240" stroke="rgba(37,99,235,.3)" stroke-width="1" stroke-dasharray="3 2"/>
+            <line x1="140" y1="10" x2="140" y2="240" stroke="rgba(37,99,235,.3)" stroke-width="1" stroke-dasharray="3 2"/>
+
+            <!-- 7 sensors symbol -->
+            <g>
+              <rect x="70" y="5" width="40" height="12" rx="3" fill="rgba(6,182,212,.12)" stroke="rgba(6,182,212,.5)" stroke-width="1"/>
+              <text x="90" y="14" text-anchor="middle" font-family="Share Tech Mono" font-size="5" fill="rgba(147,197,253,.9)">7× PZT</text>
+            </g>
+
+            <!-- Diode -->
+            <g id="diodeGroup">
+              <text x="12" y="60" font-family="Share Tech Mono" font-size="5" fill="rgba(6,182,212,.5)">DIODE</text>
+              <polygon points="78,40 102,55 78,70" fill="rgba(6,182,212,.15)" stroke="rgba(6,182,212,.7)" stroke-width="1.2"/>
+              <line x1="102" y1="40" x2="102" y2="70" stroke="rgba(6,182,212,.7)" stroke-width="1.5"/>
+            </g>
+
+            <!-- Capacitor 1 -->
+            <g id="cap1Group">
+              <text x="12" y="120" font-family="Share Tech Mono" font-size="5" fill="rgba(147,197,253,.5)">CAP 1</text>
+              <line x1="72" y1="100" x2="108" y2="100" stroke="rgba(147,197,253,.8)" stroke-width="2.5"/>
+              <line x1="72" y1="110" x2="108" y2="110" stroke="rgba(147,197,253,.8)" stroke-width="2.5"/>
+              <!-- Fill bar cap1 -->
+              <rect x="72" y="100" width="0" height="10" fill="rgba(6,182,212,.5)" id="cap1Fill"/>
+            </g>
+
+            <!-- Capacitor 2 -->
+            <g id="cap2Group">
+              <text x="12" y="170" font-family="Share Tech Mono" font-size="5" fill="rgba(147,197,253,.5)">CAP 2</text>
+              <line x1="72" y1="160" x2="108" y2="160" stroke="rgba(147,197,253,.8)" stroke-width="2.5"/>
+              <line x1="72" y1="170" x2="108" y2="170" stroke="rgba(147,197,253,.8)" stroke-width="2.5"/>
+              <rect x="72" y="160" width="0" height="10" fill="rgba(6,182,212,.5)" id="cap2Fill"/>
+            </g>
+
+            <!-- LED -->
+            <g id="ledGroup">
+              <text x="25" y="218" font-family="Share Tech Mono" font-size="5" fill="rgba(252,165,165,.6)">LED</text>
+              <circle id="ledCircuit" cx="90" cy="220" r="14" fill="rgba(100,0,0,.3)" stroke="rgba(200,0,0,.4)" stroke-width="1.5"/>
+              <polygon points="84,213 96,220 84,227" fill="rgba(200,0,0,.4)" id="ledArrow"/>
+              <line x1="96" y1="213" x2="96" y2="227" stroke="rgba(200,0,0,.5)" stroke-width="1.5"/>
+            </g>
+
+            <!-- Current flow arrows -->
+            <text x="110" y="57" font-family="Share Tech Mono" font-size="6" fill="rgba(6,182,212,.4)" id="flowArrow1">↓</text>
+            <text x="110" y="120" font-family="Share Tech Mono" font-size="6" fill="rgba(147,197,253,.4)" id="flowArrow2">↓</text>
+            <text x="110" y="175" font-family="Share Tech Mono" font-size="6" fill="rgba(147,197,253,.4)" id="flowArrow3">↓</text>
+          </svg>
+        </div>
+
+        <!-- LED standalone indicator -->
+        <div class="led-wrap" id="ledWrap">
+          <div class="led-label">LED Indicador</div>
+          <div class="led-bulb" id="ledBulb"></div>
+          <div class="led-status" id="ledStatus">APAGADO — Sin energía</div>
+        </div>
+      </div>
+
+    </div><!-- end sim-layout -->
+  </div>
+</section>
+
+<!-- GALERIA -->
+<section id="galeria" class="sec">
+  <div class="stag fi">Evidencia fotográfica</div>
+  <h2 class="fi">Galería del Proyecto</h2>
+  <div class="gal-tabs fi">
+    <button class="gtab on" data-f="all">Todo</button>
+    <button class="gtab" data-f="proceso">Proceso</button>
+    <button class="gtab" data-f="circuito">Circuito</button>
+    <button class="gtab" data-f="resina">Resina</button>
+  </div>
+  <div class="gal-grid" id="galGrid">
+    <div class="gal-item fi" data-c="proceso" onclick="openLb(this)">
+      <img src="img/pet.jpg" alt="Picando PET a tijera">
+      <div class="gal-info"><div class="gal-t">Evaluación de relleno — PET</div><div class="gal-d">Proceso de picado del PET para evaluarlo como relleno. Fue descartado por flotación en la resina.</div><span class="gal-badge">Proceso</span></div>
+    </div>
+    <div class="gal-item fi" data-c="circuito" onclick="openLb(this)">
+      <img src="img/circuito.jpg" alt="Ensamble del circuito">
+      <div class="gal-info"><div class="gal-t">Ensamble del circuito</div><div class="gal-d">El equipo trabaja en el ensamble y medición del circuito piezoeléctrico con multímetro en el laboratorio.</div><span class="gal-badge">Circuito</span></div>
+    </div>
+    <div class="gal-item fi" data-c="resina" onclick="openLb(this)">
+      <img src="img/resina_mal.jpg" alt="Primera muestra resina + PET">
+      <div class="gal-info"><div class="gal-t">Primera muestra: resina + PET ✗</div><div class="gal-d">Resultado fallido. El PET flotó durante el curado generando distribución irregular y exceso de rigidez.</div><span class="gal-badge">Resina</span></div>
+    </div>
+    <div class="gal-item fi" data-c="circuito" onclick="openLb(this)">
+      <img src="img/circuito_func.jpg" alt="Circuito funcional">
+      <div class="gal-info"><div class="gal-t">Primer circuito funcional</div><div class="gal-d">Prototipo del circuito piezoeléctrico sobre base de cartón. Sensores PZT en paralelo con capacitores y diodo rectificador.</div><span class="gal-badge">Circuito</span></div>
+    </div>
+    <div class="gal-item fi" data-c="resina" onclick="openLb(this)">
+      <img src="img/resina_bien.jpg" alt="Muestra exitosa resina + caucho">
+      <div class="gal-info"><div class="gal-t">Primera muestra: resina + caucho ✓</div><div class="gal-d">Resultado exitoso. El caucho triturado presenta flexibilidad adecuada y distribución homogénea en la resina.</div><span class="gal-badge">Resina</span></div>
+    </div>
+    <div class="gal-item fi" data-c="proceso" onclick="openLb(this)">
+      <img src="img/molde.jpg" alt="Baldosa en molde hexagonal">
+      <div class="gal-info"><div class="gal-t">Baldosa en molde hexagonal</div><div class="gal-d">Vista superior del molde hexagonal durante el ensamble multicapa con resina, caucho y sensores PZT.</div><span class="gal-badge">Proceso</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- LIGHTBOX -->
+<div class="lb" id="lb" onclick="closeLb(event)">
+  <div class="lb-box">
+    <button class="lb-x" onclick="closeLb()">✕</button>
+    <img id="lbImg" src="" alt="">
+    <div class="lb-cap" id="lbCap"></div>
+  </div>
+</div>
+
+<!-- REFERENCIAS -->
+<div id="referencias" class="sfull" style="background:var(--bg2)">
+<div class="inn">
+  <div class="stag fi">Fuentes consultadas</div>
+  <h2 class="fi">Referencias Bibliográficas</h2>
+  <div class="verified fi">✓ Todas las fuentes han sido verificadas y corresponden a publicaciones académicas confiables</div>
+  <div class="ref-tabs fi">
+    <button class="rtab on" data-r="libros">Libros</button>
+    <button class="rtab" data-r="articulos">Artículos científicos</button>
+    <button class="rtab" data-r="web">Fuentes web</button>
+  </div>
+  <div class="rsec on" id="ref-libros">
+    <ul class="ref-list fi">
+      <li><div class="rn">1</div><div><div class="rt"><strong>Jaffe, B., Cook, W. R., &amp; Jaffe, H. (1971).</strong> Piezoelectric Ceramics. Academic Press, London. Texto fundacional sobre materiales PZT y comportamiento piezoeléctrico de cerámicas tipo perovskita.</div></div></li>
+      <li><div class="rn">2</div><div><div class="rt"><strong>Priya, S., &amp; Inman, D. J. (Eds.) (2009).</strong> Energy Harvesting Technologies. Springer, New York. ISBN 978-0-387-76463-4. Referencia sobre captación de energía piezoeléctrica en superficies de alto tránsito.<br><a href="https://doi.org/10.1007/978-0-387-76464-1" target="_blank" class="rlink">↗ doi.org/10.1007/978-0-387-76464-1</a></div></div></li>
+      <li><div class="rn">3</div><div><div class="rt"><strong>Hales, T. C. (2001).</strong> The Honeycomb Conjecture. Discrete &amp; Computational Geometry, 25(1), 1–22. Springer. Demostración de la eficiencia óptima de la teselación hexagonal.<br><a href="https://doi.org/10.1007/s004540010071" target="_blank" class="rlink">↗ doi.org/10.1007/s004540010071</a></div></div></li>
+    </ul>
+  </div>
+  <div class="rsec" id="ref-articulos">
+    <ul class="ref-list fi">
+      <li><div class="rn">4</div><div><div class="rt"><strong>Curie, J., &amp; Curie, P. (1880).</strong> Développement par compression de l'électricité polaire dans les cristaux hémièdres à faces inclinées. Bulletin de la Société Minéralogique de France, 3, 90–93. Artículo original del descubrimiento del efecto piezoeléctrico.</div></div></li>
+      <li><div class="rn">5</div><div><div class="rt"><strong>Anton, S. R., &amp; Sodano, H. A. (2007).</strong> A review of power harvesting using piezoelectric materials (2003–2006). Smart Materials and Structures, 16(3), R1–R21.<br><a href="https://doi.org/10.1088/0964-1726/16/3/R01" target="_blank" class="rlink">↗ doi.org/10.1088/0964-1726/16/3/R01</a></div></div></li>
+      <li><div class="rn">6</div><div><div class="rt"><strong>Granstrom, J., Feenstra, J., Sodano, H. A., &amp; Farinholt, K. (2007).</strong> Energy harvesting from a backpack instrumented with piezoelectric shoulder straps. Smart Materials and Structures, 16(5), 1810–1820.<br><a href="https://doi.org/10.1088/0964-1726/16/5/036" target="_blank" class="rlink">↗ doi.org/10.1088/0964-1726/16/5/036</a></div></div></li>
+    </ul>
+  </div>
+  <div class="rsec" id="ref-web">
+    <ul class="ref-list fi">
+      <li><div class="rn">7</div><div><div class="rt"><strong>IEA (2023).</strong> World Energy Outlook 2023. International Energy Agency, Paris.<br><a href="https://www.iea.org/reports/world-energy-outlook-2023" target="_blank" class="rlink">↗ iea.org/reports/world-energy-outlook-2023</a></div></div></li>
+      <li><div class="rn">8</div><div><div class="rt"><strong>ONU / Banco Mundial (2023).</strong> Tracking SDG 7: The Energy Progress Report 2023. Base de datos de acceso a electricidad por región.<br><a href="https://trackingsdg7.esmap.org" target="_blank" class="rlink">↗ trackingsdg7.esmap.org</a></div></div></li>
+      <li><div class="rn">9</div><div><div class="rt"><strong>UFPS (2026).</strong> Programa de Ingeniería Industrial / Tecnología en Procesos Industriales. Feria ExpoIndustria 4.0. Cúcuta, Colombia.<br><a href="https://www.ufps.edu.co" target="_blank" class="rlink">↗ ufps.edu.co</a></div></div></li>
+    </ul>
+  </div>
+</div>
+</div>
+
+<!-- RECURSOS -->
+<section id="recursos" class="sec">
+  <div class="stag fi">Material adicional</div>
+  <h2 class="fi">Recursos Adicionales</h2>
+  <div class="rec-grid">
+    <div class="rec fi" style="cursor:default"><div class="rec-icon">📊</div><div class="rec-t">Póster científico</div><div class="rec-d">Póster oficial presentado en la Feria ExpoIndustria 4.0 UFPS 2026 con toda la información técnica.</div></div>
+    <a class="rec fi" href="https://doi.org/10.1088/0964-1726/16/3/R01" target="_blank"><div class="rec-icon">📄</div><div class="rec-t">Anton &amp; Sodano (2007)</div><div class="rec-d">Revisión del estado del arte en captación de energía piezoeléctrica. Lectura recomendada.</div></a>
+    <a class="rec fi" href="https://www.iea.org/reports/world-energy-outlook-2023" target="_blank"><div class="rec-icon">🌍</div><div class="rec-t">IEA World Energy Outlook</div><div class="rec-d">Informe completo de la Agencia Internacional de Energía sobre el panorama energético global 2023.</div></a>
+    <a class="rec fi" href="https://trackingsdg7.esmap.org" target="_blank"><div class="rec-icon">⚡</div><div class="rec-t">Tracking SDG 7</div><div class="rec-d">Portal oficial de seguimiento del ODS 7: energía asequible y no contaminante.</div></a>
+    <a class="rec fi" href="https://doi.org/10.1007/s004540010071" target="_blank"><div class="rec-icon">⬡</div><div class="rec-t">Teorema del Panal — Hales</div><div class="rec-d">Base matemática de la geometría hexagonal aplicada en ECOPASO.</div></a>
+    <div class="rec fi" style="cursor:default"><div class="rec-icon">🎥</div><div class="rec-t">Video de prueba</div><div class="rec-d">Demostración del prototipo activando un LED por presión. Disponible en la sección Resultados.</div></div>
+  </div>
+</section>
+
+<!-- CONTACTO -->
+<div id="contacto" class="sfull" style="background:var(--bg2)">
+<div class="inn">
+  <div class="stag fi">Equipo e información</div>
+  <h2 class="fi">Contacto</h2>
+  <div class="grid2">
+    <div class="fi">
+      <h3 style="margin-bottom:1.1rem">Equipo ECOPASO</h3>
+      <div class="team-list">
+        <div class="tm">
+          <div class="tm-av"><img src="img/diego_r.jpg" alt="Diego Ramírez"></div>
+          <div><div class="tm-name">Diego Andrés Ramírez Sánchez</div><div class="tm-email">diegoandresrs@ufps.edu.co</div><div class="tm-role">Procesos Industriales I · UFPS</div></div>
+        </div>
+        <div class="tm">
+          <div class="tm-av"><img src="img/diego_t.jpg" alt="Diego Torrado"></div>
+          <div><div class="tm-name">Diego Fernando Torrado Guevara</div><div class="tm-email">diegofernandotg@ufps.edu.co</div><div class="tm-role">Procesos Industriales I · UFPS</div></div>
+        </div>
+        <div class="tm">
+          <!-- Foto actualizada de Mariana -->
+          <div class="tm-av"><img src="img/mariana.jpg" alt="Lidsay Mariana Ramírez"></div>
+          <div><div class="tm-name">Lidsay Mariana Ramírez Ovallos</div><div class="tm-email">lidsaymarianaro@ufps.edu.co</div><div class="tm-role">Procesos Industriales I · UFPS</div></div>
+        </div>
+      </div>
+      <div class="doc-card">
+        <div class="doc-av">SO</div>
+        <div><div style="font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);font-weight:500">Docente</div><div style="font-family:'Syne',sans-serif;font-weight:600;color:#fff;margin-top:.1rem">Silvia Juliana Orozco</div><div style="font-size:.78rem;color:var(--muted);margin-top:.15rem">Procesos Industriales I · UFPS 2026</div></div>
+      </div>
+      <div class="loc">📍 Universidad Francisco de Paula Santander · Cúcuta, Norte de Santander, Colombia</div>
+    </div>
+    <div class="cf fi">
+      <h3 style="margin-bottom:1.3rem">Envíanos un mensaje</h3>
+      <div class="fg"><label>Nombre</label><input type="text" placeholder="Tu nombre completo"></div>
+      <div class="fg"><label>Correo electrónico</label><input type="email" placeholder="tu@correo.com"></div>
+      <div class="fg"><label>Asunto</label><input type="text" placeholder="¿Sobre qué quieres escribirnos?"></div>
+      <div class="fg"><label>Mensaje</label><textarea placeholder="Escribe tu mensaje aquí..."></textarea></div>
+      <button class="btn-main" style="width:100%;justify-content:center" onclick="alert('Gracias por tu mensaje. Puedes escribirnos directamente a diegoandresrs@ufps.edu.co')">Enviar mensaje</button>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="fl">
+    <img src="img/logo.png" alt="ECOPASO">
+    <img src="img/ufps-logo.png" alt="UFPS" class="ufps-footer">
+  </div>
+  <div class="fm">ECOPASO · ExpoIndustria 4.0 · UFPS 2026<br><span style="font-size:.7rem;opacity:.5">"Cada paso, una chispa" · Procesos Industriales I</span></div>
+  <div class="fr">Universidad Francisco de Paula Santander<br>Cúcuta, Norte de Santander, Colombia</div>
+</footer>
+
+<button id="btt" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+// ============================================
+// PROGRESS BAR
+// ============================================
+var prog=document.getElementById('prog');
+window.addEventListener('scroll',function(){
+  var h=document.documentElement;
+  prog.style.width=((window.scrollY/(h.scrollHeight-h.clientHeight))*100)+'%';
+});
+
+// ============================================
+// BACK TO TOP
+// ============================================
+var btt=document.getElementById('btt');
+window.addEventListener('scroll',function(){
+  btt.className=window.scrollY>400?'show':'';
+});
+
+// ============================================
+// HAMBURGER (always visible)
+// ============================================
+var ham=document.getElementById('hamBtn'),mob=document.getElementById('mob');
+ham.addEventListener('click',function(){
+  var isOpen=mob.classList.toggle('open');
+  ham.classList.toggle('active',isOpen);
+});
+mob.querySelectorAll('a').forEach(function(a){
+  a.addEventListener('click',function(){
+    mob.classList.remove('open');
+    ham.classList.remove('active');
+  });
+});
+
+// ============================================
+// CURSOR GLOW
+// ============================================
+var cg=document.getElementById('cursorGlow');
+document.addEventListener('mousemove',function(e){
+  cg.style.left=e.clientX+'px';
+  cg.style.top=e.clientY+'px';
+});
+
+// ============================================
+// HERO PARTICLE CANVAS
+// ============================================
+(function(){
+  var c=document.getElementById('hero-canvas');
+  var s=document.getElementById('inicio');
+  function resize(){c.width=s.offsetWidth;c.height=s.offsetHeight}
+  resize();
+  window.addEventListener('resize',resize);
+  var ctx=c.getContext('2d');
+  var pts=[];
+  for(var i=0;i<55;i++){
+    pts.push({
+      x:Math.random()*c.width,y:Math.random()*c.height,
+      vx:(Math.random()-.5)*.4,vy:(Math.random()-.5)*.4,
+      r:Math.random()*1.5+.5,
+      a:Math.random()
+    });
+  }
+  function drawHex(x,y,r,a){
+    ctx.beginPath();
+    for(var i=0;i<6;i++){
+      var angle=Math.PI/3*i-Math.PI/6;
+      var px=x+r*Math.cos(angle),py=y+r*Math.sin(angle);
+      i===0?ctx.moveTo(px,py):ctx.lineTo(px,py);
+    }
+    ctx.closePath();
+    ctx.strokeStyle='rgba(37,99,235,'+a+')';
+    ctx.lineWidth=.8;
+    ctx.stroke();
+  }
+  function tick(){
+    ctx.clearRect(0,0,c.width,c.height);
+    pts.forEach(function(p){
+      p.x+=p.vx;p.y+=p.vy;
+      if(p.x<0||p.x>c.width)p.vx*=-1;
+      if(p.y<0||p.y>c.height)p.vy*=-1;
+      var a=p.a*(0.4+0.4*Math.sin(Date.now()*.001+p.x));
+      if(Math.random()<.01){
+        drawHex(p.x,p.y,6+Math.random()*8,a*.3);
+      }
+      ctx.beginPath();
+      ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle='rgba(6,182,212,'+a+')';
+      ctx.fill();
+    });
+    // connect nearby
+    for(var i=0;i<pts.length;i++){
+      for(var j=i+1;j<pts.length;j++){
+        var dx=pts[i].x-pts[j].x,dy=pts[i].y-pts[j].y;
+        var d=Math.sqrt(dx*dx+dy*dy);
+        if(d<90){
+          ctx.beginPath();
+          ctx.moveTo(pts[i].x,pts[i].y);
+          ctx.lineTo(pts[j].x,pts[j].y);
+          ctx.strokeStyle='rgba(37,99,235,'+(0.12*(1-d/90))+')';
+          ctx.lineWidth=.5;
+          ctx.stroke();
+        }
+      }
+    }
+    requestAnimationFrame(tick);
+  }
+  tick();
+})();
+
+// ============================================
+// FADE IN ON SCROLL (with stagger)
+// ============================================
+var fiEls=document.querySelectorAll('.fi');
+var obs=new IntersectionObserver(function(entries){
+  entries.forEach(function(e){
+    if(e.isIntersecting){
+      var d=e.target.dataset.delay;
+      if(d){e.target.style.transitionDelay=(parseInt(d)*0.1)+'s';}
+      e.target.classList.add('in');
+      obs.unobserve(e.target);
+    }
+  });
+},{threshold:0.1});
+fiEls.forEach(function(el){obs.observe(el)});
+
+// ============================================
+// CARD HOVER TILT + SPOTLIGHT
+// ============================================
+document.querySelectorAll('.card').forEach(function(card){
+  card.addEventListener('mousemove',function(e){
+    var r=card.getBoundingClientRect();
+    var mx=((e.clientX-r.left)/r.width)*100;
+    var my=((e.clientY-r.top)/r.height)*100;
+    card.style.setProperty('--mx',mx+'%');
+    card.style.setProperty('--my',my+'%');
+    var rx=(e.clientY-r.top-r.height/2)/20;
+    var ry=-(e.clientX-r.left-r.width/2)/20;
+    card.style.transform='translateY(-6px) scale(1.01) perspective(600px) rotateX('+rx+'deg) rotateY('+ry+'deg)';
+  });
+  card.addEventListener('mouseleave',function(){
+    card.style.transform='';
+  });
+});
+
+// ============================================
+// RIPPLE ON BUTTONS
+// ============================================
+document.querySelectorAll('.btn-main').forEach(function(btn){
+  btn.addEventListener('click',function(e){
+    var r=this.getBoundingClientRect();
+    var rip=document.createElement('span');
+    rip.className='ripple';
+    var s=Math.max(r.width,r.height);
+    rip.style.cssText='width:'+s+'px;height:'+s+'px;left:'+(e.clientX-r.left-s/2)+'px;top:'+(e.clientY-r.top-s/2)+'px;';
+    this.appendChild(rip);
+    setTimeout(function(){rip.remove()},700);
+  });
+});
+
+// ============================================
+// GALLERY FILTER
+// ============================================
+document.querySelectorAll('.gtab').forEach(function(btn){
+  btn.addEventListener('click',function(){
+    document.querySelectorAll('.gtab').forEach(function(b){b.classList.remove('on')});
+    this.classList.add('on');
+    var f=this.dataset.f;
+    document.querySelectorAll('.gal-item').forEach(function(item){
+      if(f==='all'||item.dataset.c===f){
+        item.style.display='block';
+        item.style.animation='fadeIn .4s ease';
+      } else {
+        item.style.display='none';
+      }
+    });
+  });
+});
+
+// LIGHTBOX
+function openLb(el){
+  var img=el.querySelector('img');
+  var cap=el.querySelector('.gal-t').textContent+' — '+el.querySelector('.gal-d').textContent;
+  document.getElementById('lbImg').src=img.src;
+  document.getElementById('lbCap').textContent=cap;
+  document.getElementById('lb').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeLb(e){
+  if(!e||e.target===document.getElementById('lb')||e.target.classList.contains('lb-x')){
+    document.getElementById('lb').classList.remove('open');
+    document.body.style.overflow='';
+  }
+}
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeLb({target:document.getElementById('lb')})});
+
+// REFERENCE TABS
+document.querySelectorAll('.rtab').forEach(function(btn){
+  btn.addEventListener('click',function(){
+    document.querySelectorAll('.rtab').forEach(function(b){b.classList.remove('on')});
+    document.querySelectorAll('.rsec').forEach(function(s){s.classList.remove('on')});
+    this.classList.add('on');
+    document.getElementById('ref-'+this.dataset.r).classList.add('on');
+  });
+});
+
+// ============================================
+// SIMULADOR PIEZOELÉCTRICO
+// ============================================
+var simState={
+  voltage:0,energy:0,presses:0,
+  maxEnergy:50,
+  pressing:false,
+  ledOn:false,
+  pressInterval:null,
+  capLevel1:0, capLevel2:0
+};
+
+var simTile=document.getElementById('simTile');
+var ledBulb=document.getElementById('ledBulb');
+var ledStatus=document.getElementById('ledStatus');
+var ledCircuit=document.getElementById('ledCircuit');
+var ledArrow=document.getElementById('ledArrow');
+var hexMain=document.getElementById('hexMain');
+var nodeCenter=document.getElementById('nodeCenter');
+var wave1=document.getElementById('wave1');
+var wave2=document.getElementById('wave2');
+var wave3=document.getElementById('wave3');
+var simHint=document.getElementById('simHint');
+
+// particle canvas for simulator
+var simCanvas=document.getElementById('simParticles');
+var simCtx;
+var simParticleList=[];
+
+function initSimCanvas(){
+  var wrap=document.getElementById('simTile');
+  simCanvas.width=wrap.offsetWidth;
+  simCanvas.height=wrap.offsetHeight;
+  simCtx=simCanvas.getContext('2d');
+}
+window.addEventListener('resize',initSimCanvas);
+setTimeout(initSimCanvas,300);
+
+function spawnParticles(cx,cy){
+  for(var i=0;i<18;i++){
+    var angle=Math.random()*Math.PI*2;
+    var speed=1+Math.random()*3;
+    simParticleList.push({
+      x:cx,y:cy,
+      vx:Math.cos(angle)*speed,vy:Math.sin(angle)*speed,
+      life:1,decay:0.04+Math.random()*.04,
+      r:1+Math.random()*2.5,
+      color:Math.random()>.5?'6,182,212':'37,99,235'
+    });
+  }
+}
+
+function tickSimParticles(){
+  if(!simCtx){requestAnimationFrame(tickSimParticles);return;}
+  simCtx.clearRect(0,0,simCanvas.width,simCanvas.height);
+  simParticleList=simParticleList.filter(function(p){return p.life>0});
+  simParticleList.forEach(function(p){
+    p.x+=p.vx;p.y+=p.vy;p.vy+=.06;p.life-=p.decay;
+    simCtx.beginPath();
+    simCtx.arc(p.x,p.y,p.r,0,Math.PI*2);
+    simCtx.fillStyle='rgba('+p.color+','+p.life+')';
+    simCtx.fill();
+    if(Math.random()>.7){
+      simCtx.beginPath();
+      simCtx.arc(p.x,p.y,p.r*.5,0,Math.PI*2);
+      simCtx.fillStyle='rgba(255,255,255,'+(p.life*.4)+')';
+      simCtx.fill();
+    }
+  });
+  requestAnimationFrame(tickSimParticles);
+}
+tickSimParticles();
+
+function animateWaves(){
+  [wave1,wave2,wave3].forEach(function(w,i){
+    var delay=i*180;
+    setTimeout(function(){
+      w.setAttribute('r','0');
+      w.setAttribute('opacity','0.8');
+      var start=null;
+      function step(ts){
+        if(!start)start=ts;
+        var p=(ts-start)/700;
+        if(p>=1){w.setAttribute('opacity','0');return;}
+        w.setAttribute('r',(p*85).toFixed(1));
+        w.setAttribute('opacity',(1-p).toFixed(2));
+        requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    },delay);
+  });
+}
+
+function formatNum(n,dec){return n.toFixed(dec)}
+
+function updateStats(){
+  document.getElementById('simVoltage').textContent=formatNum(simState.voltage,2);
+  document.getElementById('simEnergy').textContent=formatNum(simState.energy,2);
+  document.getElementById('simPresses').textContent=simState.presses;
+  var vp=Math.min(simState.voltage/5*100,100);
+  var ep=Math.min(simState.energy/simState.maxEnergy*100,100);
+  var pp=Math.min(simState.presses/30*100,100);
+  document.getElementById('voltBar').style.width=vp+'%';
+  document.getElementById('energyBar').style.width=ep+'%';
+  document.getElementById('pressBar').style.width=pp+'%';
+  // capacitor fill
+  var c1=Math.min(simState.capLevel1*36,36);
+  var c2=Math.min(simState.capLevel2*36,36);
+  document.getElementById('cap1Fill').setAttribute('width',c1.toFixed(1));
+  document.getElementById('cap2Fill').setAttribute('width',c2.toFixed(1));
+}
+
+function setLED(on){
+  simState.ledOn=on;
+  if(on){
+    ledBulb.classList.add('on');
+    ledStatus.textContent='ENCENDIDO — Energía activa ⚡';
+    ledCircuit.setAttribute('fill','rgba(200,0,0,.7)');
+    ledCircuit.setAttribute('stroke','rgba(252,100,100,.9)');
+    ledCircuit.setAttribute('filter','url(#glowLED)');
+    ledArrow.setAttribute('fill','rgba(252,100,100,.8)');
+    document.getElementById('ledWrap').style.borderColor='rgba(239,68,68,.4)';
+    document.getElementById('ledWrap').style.background='rgba(120,0,0,.08)';
+  } else {
+    ledBulb.classList.remove('on');
+    ledStatus.textContent='APAGADO — Sin energía';
+    ledCircuit.setAttribute('fill','rgba(100,0,0,.3)');
+    ledCircuit.setAttribute('stroke','rgba(200,0,0,.4)');
+    ledCircuit.removeAttribute('filter');
+    ledArrow.setAttribute('fill','rgba(200,0,0,.4)');
+    document.getElementById('ledWrap').style.borderColor='';
+    document.getElementById('ledWrap').style.background='';
+  }
+}
+
+function doPress(){
+  var v=1.8+Math.random()*2.2;
+  var e=v*v*0.7+Math.random()*1.5;
+  simState.voltage=Math.min(v,4.8);
+  simState.energy=Math.min(simState.energy+e,simState.maxEnergy);
+  simState.presses++;
+  simState.capLevel1=Math.min(simState.capLevel1+0.15,1);
+  simState.capLevel2=Math.min(simState.capLevel2+0.12,1);
+  if(simState.energy>3) setLED(true);
+  updateStats();
+  var w=simCanvas.width/2, h=simCanvas.height/2;
+  spawnParticles(w+(Math.random()-0.5)*60,h+(Math.random()-0.5)*60);
+  animateWaves();
+  simHint.style.color='rgba(6,182,212,.8)';
+  simHint.textContent='⚡ ¡Energía generada! '+formatNum(simState.voltage,2)+'V';
+}
+
+function tilePress(active){
+  if(active){
+    simState.pressing=true;
+    simTile.classList.add('tile-pressed');
+    simTile.style.transform='scale(0.96)';
+    hexMain.style.filter='url(#glow)';
+    nodeCenter.setAttribute('fill','rgba(6,182,212,.8)');
+    nodeCenter.setAttribute('r','7');
+    doPress();
+    simState.pressInterval=setInterval(doPress,400);
+  } else {
+    simState.pressing=false;
+    clearInterval(simState.pressInterval);
+    simTile.classList.remove('tile-pressed');
+    simTile.style.transform='';
+    hexMain.style.filter='';
+    nodeCenter.setAttribute('fill','rgba(6,182,212,.3)');
+    nodeCenter.setAttribute('r','5');
+    // voltage decays
+    setTimeout(function(){
+      if(!simState.pressing){
+        simState.voltage=0;
+        setLED(false);
+        simHint.style.color='';
+        simHint.textContent='⬡ Presiona la baldosa para generar energía';
+        updateStats();
+      }
+    },1200);
+  }
+}
+
+// prevent scroll on touch over tile
+simTile.addEventListener('touchstart',function(e){e.preventDefault();},{ passive:false });
+
+</script>
+</body>
+</html>
